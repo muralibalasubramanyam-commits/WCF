@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Carrom Federation — The apex body for carrom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ebony:#14110E;
+    --ebony-2:#1D1913;
+    --ebony-3:#2A241B;
+    --brass:#C89A4A;
+    --brass-lt:#E6C88E;
+    --ivory:#F4F0E6;
+    --ivory-2:#E7E0CF;
+    --queen:#A81F2D;
+    --ink:#171410;
+    --muted:#6E6559;
+
+    --display:"Bodoni Moda",Georgia,serif;
+    --body:"Inter Tight","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+    --gut:clamp(20px,5vw,64px);
+    --max:1280px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--ivory);color:var(--ink);
+    font-family:var(--body);font-size:17px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  :focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--brass);font-weight:500;
+  }
+  .eyebrow--dark{color:var(--muted)}
+
+  h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.02;letter-spacing:-.01em}
+
+  /* ————— utility bar ————— */
+  .util{background:#0D0B08;color:#8B8172;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+  .util .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;height:36px}
+  .util a:hover{color:var(--brass-lt)}
+  .util-links{display:flex;gap:22px}
+
+  /* ————— masthead ————— */
+  .mast{background:var(--ebony);color:var(--ivory);position:sticky;top:0;z-index:60;border-bottom:1px solid rgba(200,154,74,.22)}
+  .mast .wrap{display:flex;align-items:center;gap:28px;height:76px}
+  .crest{display:flex;align-items:center;gap:13px;flex:0 0 auto}
+  .crest svg{width:38px;height:38px}
+  .crest-txt{font-family:var(--display);font-size:15px;line-height:1.05;letter-spacing:.02em}
+  .crest-txt span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.28em;color:var(--brass);margin-top:4px}
+
+  nav.primary{margin-left:auto;display:flex;gap:30px;align-items:center}
+  nav.primary a{
+    font-size:13px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;
+    padding:6px 0;border-bottom:1px solid transparent;transition:border-color .2s,color .2s;
+  }
+  nav.primary a:hover{border-bottom-color:var(--brass);color:var(--brass-lt)}
+  .burger{display:none;margin-left:auto;background:none;border:1px solid rgba(244,240,230,.3);color:var(--ivory);
+    font-family:var(--mono);font-size:11px;letter-spacing:.15em;padding:9px 14px;text-transform:uppercase;cursor:pointer}
+  .members-dropdown{position:relative}
+  #members-toggle{background:none;border:0;color:var(--ivory);font-size:13px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;padding:6px 0;cursor:pointer}
+  .dropdown-menu{position:absolute;right:0;top:100%;background:#14110E;border:1px solid rgba(200,154,74,.12);padding:8px;border-radius:6px;min-width:240px;display:none;z-index:80}
+  .dropdown-menu.show{display:block}
+  .member-item{display:flex;gap:10px;align-items:center;padding:8px 10px;color:var(--ivory);text-decoration:none;font-family:var(--body);font-size:14px}
+  .member-item:hover{background:rgba(200,154,74,.06)}
+  .member-flag{width:20px;height:14px;display:inline-block;object-fit:cover}
+
+  /* ————— hero = the board ————— */
+  .hero{background:var(--ebony);color:var(--ivory);position:relative;overflow:hidden;padding:0 0 clamp(40px,6vw,80px)}
+  .board-frame{
+    position:relative;margin:0 var(--gut);border:1px solid rgba(200,154,74,.3);
+    padding:clamp(28px,5vw,70px) clamp(20px,4vw,56px);
+  }
+  .pocket{position:absolute;width:56px;height:56px;border-radius:50%;
+    background:radial-gradient(circle at 38% 34%, #3A3125 0%, #0A0806 68%);
+    border:1px solid rgba(200,154,74,.45)}
+  .pocket.tl{top:-28px;left:-28px}.pocket.tr{top:-28px;right:-28px}
+  .pocket.bl{bottom:-28px;left:-28px}.pocket.br{bottom:-28px;right:-28px}
+
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,5vw,72px);align-items:center}
+  .hero h1{
+    font-size:clamp(42px,6.4vw,88px);margin:22px 0 0;letter-spacing:-.025em;
+  }
+  .hero h1 em{font-style:italic;color:var(--brass-lt)}
+  .hero p.lede{
+    max-width:44ch;margin:24px 0 0;font-size:clamp(16px,1.25vw,19px);
+    color:#CFC7B6;font-weight:300;
+  }
+  .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;padding:14px 26px;
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+    border:1px solid var(--brass);color:var(--brass-lt);transition:background .2s,color .2s;
+  }
+  .btn:hover{background:var(--brass);color:var(--ebony)}
+  .btn--solid{background:var(--brass);color:var(--ebony)}
+  .btn--solid:hover{background:var(--brass-lt);color:var(--ebony)}
+
+  .board-svg{width:100%;height:auto;max-width:520px;margin:0 auto;display:block}
+  .coin{transform-origin:300px 300px;animation:settle .55s cubic-bezier(.2,.9,.25,1) backwards}
+  @keyframes settle{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+  @media (prefers-reduced-motion:reduce){.coin{animation:none}}
+
+  /* ————— stat rail ————— */
+  .rail{border-top:1px solid rgba(200,154,74,.25);background:var(--ebony)}
+  .rail .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(200,154,74,.2)}
+  .stat{background:var(--ebony);padding:34px 26px}
+  .stat b{display:block;font-family:var(--display);font-size:clamp(32px,3.4vw,46px);color:var(--ivory);font-weight:400;line-height:1}
+  .stat span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-top:12px}
+
+  /* ————— generic section ————— */
+  section.band{padding:clamp(64px,8vw,116px) 0}
+  .band--paper{background:var(--ivory)}
+  .band--tint{background:var(--ivory-2)}
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+    border-bottom:1px solid rgba(23,20,16,.16);padding-bottom:18px;margin-bottom:44px}
+  .sec-head h2{font-size:clamp(28px,3.6vw,46px)}
+  .sec-head .eyebrow{display:block;margin-bottom:12px}
+  .sec-link{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--queen);border-bottom:1px solid rgba(168,31,45,.4);padding-bottom:3px;white-space:nowrap}
+  .sec-link:hover{border-bottom-color:var(--queen)}
+
+  /* ————— fixtures ————— */
+  .fixtures{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .fx{background:#fff;border:1px solid rgba(23,20,16,.12);padding:26px 24px 24px;display:flex;flex-direction:column;gap:16px;transition:transform .2s,box-shadow .2s}
+  .fx:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(23,20,16,.09)}
+  .fx-top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .tag-live{color:#fff;background:var(--queen);padding:3px 9px;letter-spacing:.14em}
+  .tag-soon{color:var(--ebony);background:var(--ivory-2);padding:3px 9px;letter-spacing:.14em}
+  .fx h3{font-size:23px;line-height:1.15}
+  .fx .where{font-size:14px;color:var(--muted)}
+  .fx .score{font-family:var(--mono);font-size:15px;display:flex;justify-content:space-between;
+    border-top:1px solid rgba(23,20,16,.1);padding-top:14px;margin-top:auto}
+  .fx .score b{font-weight:600}
+
+  /* ————— rankings ————— */
+  .rank-shell{display:grid;grid-template-columns:1fr 300px;gap:clamp(28px,4vw,56px);align-items:start}
+  .tabs{display:flex;gap:0;margin-bottom:22px;border:1px solid rgba(23,20,16,.18);width:fit-content}
+  .tab{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    padding:11px 20px;background:none;border:0;border-right:1px solid rgba(23,20,16,.18);cursor:pointer;color:var(--muted)}
+  .tab:last-child{border-right:0}
+  .tab[aria-selected="true"]{background:var(--ebony);color:var(--brass-lt)}
+  table.rank{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:14px}
+  table.rank th{text-align:left;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+    font-weight:500;padding:0 0 12px;border-bottom:1px solid rgba(23,20,16,.25)}
+  table.rank td{padding:14px 0;border-bottom:1px solid rgba(23,20,16,.1)}
+  table.rank tr:hover td{background:rgba(200,154,74,.1)}
+  .rk{width:52px;color:var(--muted)}
+  .rk-1,.rk-2,.rk-3{color:var(--queen);font-weight:600}
+  .nm{font-family:var(--body);font-size:16px;font-weight:500}
+  .nat{width:74px;color:var(--muted);letter-spacing:.08em}
+  .pts{text-align:right;width:92px;font-weight:600}
+  .mv{text-align:right;width:56px;font-size:12px}
+  .up{color:#2E6B44}.down{color:var(--queen)}.same{color:#A79C8B}
+  .rank-note{background:var(--ebony);color:#CFC7B6;padding:30px 28px}
+  .rank-note h3{color:var(--ivory);font-size:24px;margin-bottom:14px}
+  .rank-note p{font-size:14.5px;font-weight:300;margin:0 0 18px}
+
+  /* ————— members ————— */
+  .confeds{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(23,20,16,.15);border:1px solid rgba(23,20,16,.15)}
+  .cf{background:var(--ivory);padding:30px 22px;transition:background .2s}
+  .cf:hover{background:#fff}
+  .cf b{display:block;font-family:var(--display);font-size:40px;font-weight:400;line-height:1}
+  .cf .cf-name{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+  .cf .cf-sub{font-size:13.5px;color:var(--muted);margin-top:14px;line-height:1.45}
+  .roll{margin-top:34px;font-size:14px;color:var(--muted);line-height:2;
+    column-count:4;column-gap:34px;border-top:1px solid rgba(23,20,16,.14);padding-top:26px}
+  .roll span{display:block}
+  .flag{width:24px;height:18px;margin-right:10px;vertical-align:middle;display:inline-block}
+
+  /* ————— pillars ————— */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,3vw,44px)}
+  .pl{border-top:2px solid var(--ebony);padding-top:24px}
+  .pl h3{font-size:26px;margin-bottom:14px}
+  .pl p{font-size:15.5px;color:#4A4238;margin:0 0 18px}
+  .pl a{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    border-bottom:1px solid var(--brass);padding-bottom:3px}
+
+  /* ————— news ————— */
+  .news{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(24px,3vw,44px)}
+  .lead{background:var(--ebony);color:var(--ivory);padding:clamp(30px,3.5vw,48px);display:flex;flex-direction:column;justify-content:flex-end;min-height:340px}
+  .lead h3{color:var(--ivory);font-size:clamp(26px,2.8vw,38px);margin:16px 0 14px}
+  .lead p{color:#C2BAA9;font-weight:300;margin:0;font-size:15.5px}
+  .stack{display:flex;flex-direction:column}
+  .item{padding:22px 0;border-bottom:1px solid rgba(23,20,16,.14)}
+  .item:first-child{padding-top:0}
+  .item h3{font-size:20px;margin:9px 0 6px;line-height:1.25}
+  .item p{margin:0;font-size:14.5px;color:var(--muted)}
+  .item:hover h3{color:var(--queen)}
+
+  /* ————— footer ————— */
+  footer{background:#0D0B08;color:#8B8172;padding:70px 0 34px;font-size:14px}
+  .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+  footer h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin:0 0 18px;font-weight:500}
+  footer ul{list-style:none;margin:0;padding:0;line-height:2.1}
+  footer a:hover{color:var(--ivory)}
+  .fmark{font-family:var(--display);font-size:22px;color:var(--ivory);line-height:1.2}
+  .fmark span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;color:var(--brass);margin-top:8px}
+  .fbase{margin-top:56px;padding-top:24px;border-top:1px solid rgba(200,154,74,.18);
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+
+  .placeholder-note{background:var(--queen);color:#fff;font-family:var(--mono);
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;padding:10px 16px}
+
+  /* ————— responsive ————— */
+  @media (max-width:1080px){
+    .hero-grid{grid-template-columns:1fr;gap:40px}
+    .board-svg{max-width:400px}
+    .rank-shell{grid-template-columns:1fr}
+    .confeds{grid-template-columns:repeat(2,1fr)}
+    .roll{column-count:3}
+    .news{grid-template-columns:1fr}
+    .fgrid{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:820px){
+    nav.primary{display:none}
+    .burger{display:block}
+    .rail .wrap{grid-template-columns:repeat(2,1fr)}
+    .fixtures{grid-template-columns:1fr}
+    .pillars{grid-template-columns:1fr}
+    .util-links a:nth-child(n+3){display:none}
+  }
+  @media (max-width:560px){
+    .confeds{grid-template-columns:1fr}
+    .roll{column-count:2}
+    .fgrid{grid-template-columns:1fr}
+    .pocket{width:38px;height:38px}
+    .pocket.tl{top:-19px;left:-19px}.pocket.tr{top:-19px;right:-19px}
+    .pocket.bl{bottom:-19px;left:-19px}.pocket.br{bottom:-19px;right:-19px}
+    .sec-head{flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+
+<div class="placeholder-note">Design prototype — all nations, names, fixtures and figures below are placeholder content</div>
+
+<!-- utility -->
+<div class="util">
+  <div class="wrap">
+    <div class="util-links">
+      <a href="#">English</a><a href="#">हिन्दी</a><a href="#">Français</a><a href="#">Deutsch</a>
+    </div>
+    <div class="util-links">
+      <a href="#">Member federation login</a><a href="#">Media centre</a><a href="#">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- masthead -->
+<header class="mast">
+  <div class="wrap">
+    <a class="crest" href="#top" aria-label="World Carrom Federation home">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#C89A4A" stroke-width="1.4"/>
+        <circle cx="32" cy="32" r="23" fill="none" stroke="#C89A4A" stroke-width=".8"/>
+        <circle cx="32" cy="32" r="7" fill="#A81F2D"/>
+        <circle cx="32" cy="18" r="6" fill="#F4F0E6"/>
+        <circle cx="44" cy="39" r="6" fill="#F4F0E6"/>
+        <circle cx="20" cy="39" r="6" fill="#F4F0E6"/>
+        <circle cx="32" cy="18" r="6" fill="none" stroke="#C89A4A" stroke-width=".8"/>
+        <circle cx="44" cy="39" r="6" fill="none" stroke="#C89A4A" stroke-width=".8"/>
+        <circle cx="20" cy="39" r="6" fill="none" stroke="#C89A4A" stroke-width=".8"/>
+      </svg>
+      <span class="crest-txt">World Carrom<br>Federation<span>Est. MMXXVI</span></span>
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <a href="#competitions">Competitions</a>
+      <a href="#rankings">Rankings</a>
+      <div class="members-dropdown">
+        <button id="members-toggle" aria-expanded="false" aria-controls="members-menu">Members ▾</button>
+        <div id="members-menu" class="dropdown-menu" role="menu">
+          <!-- member items populated by script -->
+        </div>
+      </div>
+      <a href="#governance">Governance</a>
+      <a href="#news">News</a>
+    </nav>
+    <button class="burger" id="burger" aria-expanded="false">Menu</button>
+  </div>
+</header>
+
+<!-- hero -->
+<section class="hero" id="top">
+  <div class="board-frame">
+    <span class="pocket tl"></span><span class="pocket tr"></span>
+    <span class="pocket bl"></span><span class="pocket br"></span>
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">The apex body for the game of carrom</p>
+        <h1>One board.<br>One code.<br><em>Every nation.</em></h1>
+        <p class="lede">The World Carrom Federation writes the Laws of the Game, sanctions the World Championship, and certifies the ranking of every player in every member nation.</p>
+        <div class="hero-cta">
+          <a class="btn btn--solid" href="#competitions">World Championship 2026</a>
+          <a class="btn" href="#members">Affiliate your federation</a>
+        </div>
+      </div>
+
+      <!-- the board: signature element -->
+      <svg class="board-svg" viewBox="0 0 600 600" role="img" aria-label="A carrom board with nineteen carrom men arranged for the opening break, the red queen at centre">
+        <defs>
+          <g id="baseline">
+            <line x1="120" y1="505" x2="480" y2="505" stroke="#C89A4A" stroke-width="1.2"/>
+            <line x1="120" y1="517" x2="480" y2="517" stroke="#C89A4A" stroke-width="1.2"/>
+            <circle cx="120" cy="511" r="15" fill="none" stroke="#A81F2D" stroke-width="1.6"/>
+            <circle cx="480" cy="511" r="15" fill="none" stroke="#A81F2D" stroke-width="1.6"/>
+            <path d="M104 526 L74 556" stroke="#C89A4A" stroke-width="1.2"/>
+            <path d="M74 556 l11 -2 l-2 -9" fill="none" stroke="#C89A4A" stroke-width="1.2"/>
+            <path d="M496 526 L526 556" stroke="#C89A4A" stroke-width="1.2"/>
+            <path d="M526 556 l-11 -2 l2 -9" fill="none" stroke="#C89A4A" stroke-width="1.2"/>
+          </g>
+        </defs>
+
+        <rect x="14" y="14" width="572" height="572" fill="#1A1610" stroke="#C89A4A" stroke-width="1"/>
+        <rect x="42" y="42" width="516" height="516" fill="none" stroke="rgba(200,154,74,.45)" stroke-width="1"/>
+
+        <!-- pockets -->
+        <circle cx="72" cy="72" r="27" fill="#0A0806" stroke="#C89A4A" stroke-width="1.2"/>
+        <circle cx="528" cy="72" r="27" fill="#0A0806" stroke="#C89A4A" stroke-width="1.2"/>
+        <circle cx="72" cy="528" r="27" fill="#0A0806" stroke="#C89A4A" stroke-width="1.2"/>
+        <circle cx="528" cy="528" r="27" fill="#0A0806" stroke="#C89A4A" stroke-width="1.2"/>
+
+        <!-- four baselines -->
+        <use href="#baseline"/>
+        <use href="#baseline" transform="rotate(90 300 300)"/>
+        <use href="#baseline" transform="rotate(180 300 300)"/>
+        <use href="#baseline" transform="rotate(270 300 300)"/>
+
+        <!-- centre rosette -->
+        <circle cx="300" cy="300" r="92" fill="none" stroke="#A81F2D" stroke-width="1.6"/>
+        <circle cx="300" cy="300" r="74" fill="none" stroke="#C89A4A" stroke-width="1"/>
+        <g fill="none" stroke="#C89A4A" stroke-width="1">
+          <circle cx="300" cy="226" r="11"/><circle cx="364" cy="263" r="11"/>
+          <circle cx="364" cy="337" r="11"/><circle cx="300" cy="374" r="11"/>
+          <circle cx="236" cy="337" r="11"/><circle cx="236" cy="263" r="11"/>
+        </g>
+
+        <!-- carrom men: outer ring (12) -->
+        <g stroke="#C89A4A" stroke-width=".9">
+          <circle class="coin" style="animation-delay:.50s" cx="300" cy="246" r="13" fill="#EDE3CE"/>
+          <circle class="coin" style="animation-delay:.53s" cx="327" cy="253" r="13" fill="#0D0B09"/>
+          <circle class="coin" style="animation-delay:.56s" cx="347" cy="273" r="13" fill="#EDE3CE"/>
+          <circle class="coin" style="animation-delay:.59s" cx="354" cy="300" r="13" fill="#0D0B09"/>
+          <circle class="coin" style="animation-delay:.62s" cx="347" cy="327" r="13" fill="#EDE3CE"/>
+          <circle class="coin" style="animation-delay:.65s" cx="327" cy="347" r="13" fill="#0D0B09"/>
+          <circle class="coin" style="animation-delay:.68s" cx="300" cy="354" r="13" fill="#EDE3CE"/>
+          <circle class="coin" style="animation-delay:.71s" cx="273" cy="347" r="13" fill="#0D0B09"/>
+          <circle class="coin" style="animation-delay:.74s" cx="253" cy="327" r="13" fill="#EDE3CE"/>
+          <circle class="coin" style="animation-delay:.77s" cx="246" cy="300" r="13" fill="#0D0B09"/>
+          <circle class="coin" style="animation-delay:.80s" cx="253" cy="273" r="13" fill="#EDE3CE"/>
+          <circle class="coin" style="animation-delay:.83s" cx="273" cy="253" r="13" fill="#0D0B09"/>
+
+          <!-- inner ring (6) -->
+          <circle class="coin" style="animation-delay:.26s" cx="300" cy="273" r="13" fill="#0D0B09"/>
+          <circle class="coin" style="animation-delay:.30s" cx="323" cy="287" r="13" fill="#EDE3CE"/>
+          <circle class="coin" style="animation-delay:.34s" cx="323" cy="313" r="13" fill="#0D0B09"/>
+          <circle class="coin" style="animation-delay:.38s" cx="300" cy="327" r="13" fill="#EDE3CE"/>
+          <circle class="coin" style="animation-delay:.42s" cx="277" cy="313" r="13" fill="#0D0B09"/>
+          <circle class="coin" style="animation-delay:.46s" cx="277" cy="287" r="13" fill="#EDE3CE"/>
+
+          <!-- the queen -->
+          <circle class="coin" style="animation-delay:.10s" cx="300" cy="300" r="13" fill="#A81F2D"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- stat rail -->
+<div class="rail">
+  <div class="wrap">
+    <div class="stat"><b>68</b><span>Member federations</span></div>
+    <div class="stat"><b>5</b><span>Continental confederations</span></div>
+    <div class="stat"><b>1,240</b><span>Ranked players</span></div>
+    <div class="stat"><b>1935</b><span>Laws first codified</span></div>
+  </div>
+</div>
+
+<!-- competitions -->
+<section class="band band--paper" id="competitions">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">Competitions</span><h2>On the board now</h2></div>
+      <a class="sec-link" href="#">Full calendar</a>
+    </div>
+    <div class="fixtures">
+      <article class="fx">
+        <div class="fx-top"><span class="tag-live">Live</span><span>Round of 16 · Table 3</span></div>
+        <h3>World Championship 2026</h3>
+        <p class="where">Colombo, Sri Lanka · 14–22 August</p>
+        <div class="score"><span>IND <b>2</b></span><span>—</span><span><b>1</b> SRI</span></div>
+      </article>
+      <article class="fx">
+        <div class="fx-top"><span class="tag-soon">In 6 days</span><span>Qualifier</span></div>
+        <h3>Pan-American Cup</h3>
+        <p class="where">Toronto, Canada · 15–17 August</p>
+        <div class="score"><span>16 nations</span><span>Draw published</span></div>
+      </article>
+      <article class="fx">
+        <div class="fx-top"><span class="tag-soon">In 24 days</span><span>Ranking event</span></div>
+        <h3>European Open Series, Leg 4</h3>
+        <p class="where">Bern, Switzerland · 2–4 September</p>
+        <div class="score"><span>Entries close 22 Aug</span><span>Enter</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- rankings -->
+<section class="band band--tint" id="rankings">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">World rankings</span><h2>The order of play</h2></div>
+      <a class="sec-link" href="#">How points are earned</a>
+    </div>
+    <div class="rank-shell">
+      <div>
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" aria-selected="true" data-key="ms">Men's singles</button>
+          <button class="tab" role="tab" aria-selected="false" data-key="ws">Women's singles</button>
+          <button class="tab" role="tab" aria-selected="false" data-key="db">Doubles</button>
+        </div>
+        <table class="rank">
+          <thead><tr><th>Rank</th><th>Player</th><th>Nation</th><th class="pts">Points</th><th class="mv">±</th></tr></thead>
+          <tbody id="rank-body"></tbody>
+        </table>
+      </div>
+      <aside class="rank-note">
+        <h3>Ranked, not rated</h3>
+        <p>Points are earned only at sanctioned events and roll off after 52 weeks. Every ranked player is traceable to a licence held by a member federation.</p>
+        <p>The list is republished each Monday at 12:00 UTC.</p>
+        <a class="btn" href="#">Ranking regulations</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- members -->
+<section class="band band--paper" id="members">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">Member federations</span><h2>Five confederations</h2></div>
+      <a class="sec-link" href="#">Affiliation process</a>
+    </div>
+    <div class="confeds">
+      <div class="cf"><b>24</b><div class="cf-name">Asia</div><p class="cf-sub">The sport's heartland and the deepest ranked field.</p></div>
+      <div class="cf"><b>21</b><div class="cf-name">Europe</div><p class="cf-sub">Longest-running open circuit outside Asia.</p></div>
+      <div class="cf"><b>9</b><div class="cf-name">Americas</div><p class="cf-sub">Fastest-growing region by licensed players.</p></div>
+      <div class="cf"><b>8</b><div class="cf-name">Africa</div><p class="cf-sub">Priority region for the development fund.</p></div>
+      <div class="cf"><b>6</b><div class="cf-name">Oceania</div><p class="cf-sub">Newest confederation, admitted in full in 2026.</p></div>
+    </div>
+    <div class="roll">
+      <span><img class="flag" src="https://flagcdn.com/24x18/au.png" alt="Australia flag" loading="lazy">Australia</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/bd.png" alt="Bangladesh flag" loading="lazy">Bangladesh</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/ca.png" alt="Canada flag" loading="lazy">Canada</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/cz.png" alt="Czech Republic flag" loading="lazy">Czech Republic</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/fr.png" alt="France flag" loading="lazy">France</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/de.png" alt="Germany flag" loading="lazy">Germany</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/hk.png" alt="Hong Kong flag" loading="lazy">Hong Kong</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/in.png" alt="India flag" loading="lazy">India</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/it.png" alt="Italy flag" loading="lazy">Italy</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/jp.png" alt="Japan flag" loading="lazy">Japan</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/kr.png" alt="South Korea flag" loading="lazy">South Korea</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/my.png" alt="Malaysia flag" loading="lazy">Malaysia</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/mv.png" alt="Maldives flag" loading="lazy">Maldives</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/nz.png" alt="New Zealand flag" loading="lazy">New Zealand</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/pk.png" alt="Pakistan flag" loading="lazy">Pakistan</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/pl.png" alt="Poland flag" loading="lazy">Poland</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/qa.png" alt="Qatar flag" loading="lazy">Qatar</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/sa.png" alt="Saudi Arabia flag" loading="lazy">Saudi Arabia</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/sg.png" alt="Singapore flag" loading="lazy">Singapore</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/lk.png" alt="Sri Lanka flag" loading="lazy">Sri Lanka</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/th.png" alt="Thailand flag" loading="lazy">Thailand</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/ae.png" alt="UAE flag" loading="lazy">UAE</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/gb.png" alt="United Kingdom flag" loading="lazy">United Kingdom</span>
+      <span><img class="flag" src="https://flagcdn.com/24x18/us.png" alt="United States of America flag" loading="lazy">United States of America</span>
+    </div>
+  </div>
+</section>
+
+<!-- governance -->
+<section class="band band--tint" id="governance">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">Governance</span><h2>What the federation is for</h2></div>
+    </div>
+    <div class="pillars">
+      <div class="pl">
+        <h3>Laws of the Game</h3>
+        <p>One published rulebook, one board specification, one striker standard — binding at every sanctioned event from a club night to the World Championship.</p>
+        <a href="#">Read the Laws (2026 edition)</a>
+      </div>
+      <div class="pl">
+        <h3>Integrity</h3>
+        <p>Anti-doping under the WADA Code, competition-manipulation reporting, and an independent disciplinary chamber that sits apart from the executive.</p>
+        <a href="#">Report a concern</a>
+      </div>
+      <div class="pl">
+        <h3>Development</h3>
+        <p>Boards, coach education and referee certification funded into emerging federations, with a published account of where every grant went.</p>
+        <a href="#">Development programme</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- news -->
+<section class="band band--paper" id="news">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">Newsroom</span><h2>Latest</h2></div>
+      <a class="sec-link" href="#">All releases</a>
+    </div>
+    <div class="news">
+      <a class="lead" href="#">
+        <span class="eyebrow">8 August 2026 · Congress</span>
+        <h3>Congress adopts the 2026 Laws of the Game</h3>
+        <p>Delegates from 61 federations voted to standardise striker weight and to bring the 30-second shot clock into all sanctioned singles play from 1 January.</p>
+      </a>
+      <div class="stack">
+        <a class="item" href="#"><span class="eyebrow eyebrow--dark">6 August · Rankings</span><h3>Ranking roll-off shortened to 52 weeks</h3><p>The change takes effect with the Monday list of 7 September.</p></a>
+        <a class="item" href="#"><span class="eyebrow eyebrow--dark">2 August · Development</span><h3>Twelve federations receive board grants</h3><p>First allocation from the development fund reaches eight African members.</p></a>
+        <a class="item" href="#"><span class="eyebrow eyebrow--dark">28 July · Officiating</span><h3>Referee certification opens to all members</h3><p>Level 1 modules are now available in four languages.</p></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <div class="fmark">World Carrom Federation<span>Est. MMXXVI</span></div>
+        <p style="margin-top:20px;max-width:34ch">The apex governing body for the game of carrom.</p>
+      </div>
+      <div><h4>Competitions</h4><ul>
+        <li><a href="#">World Championship</a></li><li><a href="#">World Cup</a></li>
+        <li><a href="#">Continental cups</a></li><li><a href="#">Calendar</a></li><li><a href="#">Results archive</a></li></ul></div>
+      <div><h4>The federation</h4><ul>
+        <li><a href="#">Statutes</a></li><li><a href="#">Executive committee</a></li>
+        <li><a href="#">Congress</a></li><li><a href="#">Annual report</a></li><li><a href="#">Careers</a></li></ul></div>
+      <div><h4>Confederations</h4><ul>
+        <li><a href="#">Asia</a></li><li><a href="#">Europe</a></li><li><a href="#">Americas</a></li>
+        <li><a href="#">Africa</a></li><li><a href="#">Oceania</a></li></ul></div>
+    </div>
+    <div class="fbase">
+      <span>© 2026 World Carrom Federation</span>
+      <span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Accessibility</a> · <a href="#">Media accreditation</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const RANKINGS = {
+  ms:[["Arjun Devarajan","IND",8940,"+0"],["Nuwan Perera","SRI",8215,"+1"],["Imran Rafiq","PAK",7880,"-1"],
+      ["Hassan Naeem","MDV",6905,"+2"],["Kenji Aoyama","JPN",6440,"+0"],["Marek Zielinski","POL",5990,"-1"],
+      ["Daniel Osei","GBR",5610,"+3"],["Ravi Chandran","USA",5285,"+0"],["Thomas Brunner","SUI",4960,"-2"],
+      ["Faisal Al-Harbi","UAE",4715,"+1"]],
+  ws:[["Meera Sundaram","IND",8620,"+0"],["Chamari Silva","SRI",8110,"+0"],["Aisha Rahman","BAN",7460,"+2"],
+      ["Yuki Morishita","JPN",6890,"-1"],["Elena Kowalczyk","POL",6320,"+1"],["Priya Nathan","USA",6055,"-2"],
+      ["Fatima Zahra","MAR",5730,"+4"],["Anna Lindqvist","SWE",5410,"+0"],["Nadia Farouk","UAE",5145,"-1"],
+      ["Grace Mwangi","KEN",4880,"+2"]],
+  db:[["Devarajan / Chandran","IND",9210,"+0"],["Perera / Silva","SRI",8730,"+1"],["Rafiq / Iqbal","PAK",8095,"-1"],
+      ["Naeem / Waheed","MDV",7340,"+0"],["Aoyama / Morishita","JPN",6710,"+2"],["Zielinski / Kowalczyk","POL",6280,"-1"],
+      ["Osei / Wren","GBR",5845,"+0"],["Brunner / Steiner","SUI",5490,"+1"],["Al-Harbi / Nasser","UAE",5120,"-2"],
+      ["Nathan / Weber","USA",4835,"+0"]]
+};
+
+const body = document.getElementById('rank-body');
+
+function paint(key){
+  body.innerHTML = RANKINGS[key].map((r,i)=>{
+    const n = i+1;
+    const mv = r[3];
+    const cls = mv === "+0" ? "same" : (mv.startsWith("+") ? "up" : "down");
+    const glyph = mv === "+0" ? "—" : (mv.startsWith("+") ? "▲ "+mv.slice(1) : "▼ "+mv.slice(1));
+    return `<tr>
+      <td class="rk ${n<4?'rk-'+n:''}">${String(n).padStart(2,'0')}</td>
+      <td class="nm">${r[0]}</td>
+      <td class="nat">${r[1]}</td>
+      <td class="pts">${r[2].toLocaleString()}</td>
+      <td class="mv ${cls}">${glyph}</td>
+    </tr>`;
+  }).join('');
+}
+
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+    t.setAttribute('aria-selected','true');
+    paint(t.dataset.key);
+  });
+});
+paint('ms');
+
+document.getElementById('burger').addEventListener('click',e=>{
+  const nav = document.querySelector('nav.primary');
+  const open = nav.style.display === 'flex';
+  nav.style.cssText = open ? '' : 'display:flex;position:absolute;top:76px;left:0;right:0;background:#14110E;flex-direction:column;gap:0;padding:12px 24px 24px;border-bottom:1px solid rgba(200,154,74,.25)';
+  e.currentTarget.setAttribute('aria-expanded', String(!open));
+});
+
+// Members dropdown population and link scaffolding
+let MEMBER_LINKS = {}; // will be loaded from members.json at runtime
+
+const MEMBERS = [
+  {name:'Australia', code:'au'}, {name:'Bangladesh', code:'bd'}, {name:'Canada', code:'ca'}, {name:'Czech Republic', code:'cz'},
+  {name:'France', code:'fr'}, {name:'Germany', code:'de'}, {name:'Hong Kong', code:'hk'}, {name:'India', code:'in'},
+  {name:'Italy', code:'it'}, {name:'Japan', code:'jp'}, {name:'South Korea', code:'kr'}, {name:'Malaysia', code:'my'},
+  {name:'Maldives', code:'mv'}, {name:'New Zealand', code:'nz'}, {name:'Pakistan', code:'pk'}, {name:'Poland', code:'pl'},
+  {name:'Qatar', code:'qa'}, {name:'Saudi Arabia', code:'sa'}, {name:'Singapore', code:'sg'}, {name:'Sri Lanka', code:'lk'},
+  {name:'Thailand', code:'th'}, {name:'UAE', code:'ae'}, {name:'United Kingdom', code:'gb'}, {name:'United States of America', code:'us'}
+];
+
+function populateMembersMenu(){
+  const menu = document.getElementById('members-menu');
+  menu.innerHTML = '';
+  MEMBERS.forEach(m=>{
+    const href = MEMBER_LINKS[m.name] && MEMBER_LINKS[m.name].trim() ? MEMBER_LINKS[m.name].trim() : '#members';
+    const a = document.createElement('a');
+    a.className = 'member-item';
+    a.setAttribute('role','menuitem');
+    a.href = href;
+    if(href !== '#members') a.target = '_blank';
+    a.rel = 'noopener';
+    const img = document.createElement('img');
+    img.className = 'member-flag';
+    img.src = `https://flagcdn.com/20x14/${m.code}.png`;
+    img.alt = `${m.name} flag`;
+    img.loading = 'lazy';
+    const span = document.createElement('span');
+    span.textContent = m.name;
+    a.appendChild(img);
+    a.appendChild(span);
+    menu.appendChild(a);
+  });
+}
+
+// populate menu after MEMBER_LINKS is loaded (fallback if fetch fails)
+function loadMemberLinks(){
+  fetch('members.json')
+    .then(r=> r.ok ? r.json() : Promise.reject('no json'))
+    .then(data=>{ MEMBER_LINKS = data || {}; populateMembersMenu(); })
+    .catch(()=>{ MEMBER_LINKS = {}; populateMembersMenu(); });
+}
+
+loadMemberLinks();
+
+// dropdown toggle behaviour
+const toggle = document.getElementById('members-toggle');
+const menuEl = document.getElementById('members-menu');
+toggle.addEventListener('click', ()=>{
+  const open = menuEl.classList.toggle('show');
+  toggle.setAttribute('aria-expanded', String(open));
+});
+// close when clicking outside
+document.addEventListener('click', e=>{
+  if(!document.querySelector('.members-dropdown').contains(e.target)){
+    menuEl.classList.remove('show');
+    toggle.setAttribute('aria-expanded','false');
+  }
+});
+</script>
+</body>
+</html>
