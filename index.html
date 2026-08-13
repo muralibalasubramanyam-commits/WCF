@@ -173,7 +173,7 @@
   .rank-note p{font-size:14.5px;font-weight:300;margin:0 0 18px}
 
   /* ————— members ————— */
-  .confeds{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(23,20,16,.15);border:1px solid rgba(23,20,16,.15)}
+  .confeds{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(23,20,16,.15);border:1px solid rgba(23,20,16,.15)}
   .cf{background:var(--ivory);padding:30px 22px;transition:background .2s}
   .cf:hover{background:#fff}
   .cf b{display:block;font-family:var(--display);font-size:40px;font-weight:400;line-height:1}
@@ -468,8 +468,9 @@
       <div class="cf"><b>24</b><div class="cf-name">Asia</div><p class="cf-sub">The sport's heartland and the deepest ranked field.</p></div>
       <div class="cf"><b>21</b><div class="cf-name">Europe</div><p class="cf-sub">Longest-running open circuit outside Asia.</p></div>
       <div class="cf"><b>9</b><div class="cf-name">Americas</div><p class="cf-sub">Fastest-growing region by licensed players.</p></div>
-      <div class="cf"><b>8</b><div class="cf-name">Africa</div><p class="cf-sub">Priority region for the development fund.</p></div>
+      <div class="cf"><b>6</b><div class="cf-name">Middle East</div><p class="cf-sub">Emerging national programmes across the region.</p></div>
       <div class="cf"><b>6</b><div class="cf-name">Oceania</div><p class="cf-sub">Newest confederation, admitted in full in 2026.</p></div>
+      <div class="cf"><b>--</b><div class="cf-name">All regions</div><p class="cf-sub">Total member federations across every region.</p></div>
     </div>
     <div class="member-controls">
       <div class="label">Show:</div>
@@ -727,21 +728,22 @@ document.addEventListener('click', function(e){
 });
 
 function updateConfedCounts(){
-  // mapping of region codes to confed index in DOM (.confeds .cf order)
-  const map = { 'ASIA':0, 'PAC':4, 'NA':2, 'EUR':1, 'ME':0, 'AFR':3 };
-  const counts = [0,0,0,0,0];
+  // confed order: Asia(0), Europe(1), Americas(2), Middle East(3), Oceania(4), All(5)
+  const map = { 'ASIA':0, 'EUR':1, 'NA':2, 'ME':3, 'PAC':4 };
+  const counts = [0,0,0,0,0,0];
   MEMBERS.forEach(m=>{
     const entry = MEMBER_LINKS[m.name];
     let region = '';
     if(entry && typeof entry === 'object') region = (entry.region||entry.Region||'').toUpperCase();
     if(!region && typeof entry === 'string') region = '';
-    const idx = map[region] !== undefined ? map[region] : 0;
-    counts[idx]++;
+    const idx = map[region] !== undefined ? map[region] : -1;
+    if(idx >= 0) counts[idx]++;
+    counts[5]++;// total
   });
   const cfEls = document.querySelectorAll('.confeds .cf');
   for(let i=0;i<cfEls.length;i++){
     const b = cfEls[i].querySelector('b');
-    if(b) b.textContent = counts[i];
+    if(b) b.textContent = (i<counts.length?counts[i]:'--');
   }
 }
 
@@ -753,11 +755,43 @@ function finalizeMembers(){
 }
 
 // override loadMemberLinks to call finalizeMembers instead of just populateMembersMenu
+// Optional: set this to your published Google Sheet gviz URL if you want live import
+const SHEET_GVIZ_URL = ""; // e.g. https://docs.google.com/spreadsheets/d/ SHEET_ID /gviz/tq?gid=0
+
+function importMembersFromGviz(url){
+  return fetch(url)
+    .then(r=> r.ok ? r.text() : Promise.reject('no sheet'))
+    .then(t=>{
+      // strip google viz prefix
+      const jsonText = t.replace(/^[\s\S]*?google\.visualization\.Query\.setResponse\(/,'').replace(/\);?\s*$/,'');
+      const obj = JSON.parse(jsonText);
+      const cols = obj.table.cols.map(c=> (c.label||c.id||'').toLowerCase());
+      const rows = obj.table.rows || [];
+      const out = {};
+      rows.forEach(r=>{
+        const cvals = r.c.map(cell=> cell && cell.v ? String(cell.v).trim() : '');
+        const rowObj = {};
+        cols.forEach((col,i)=> rowObj[col] = cvals[i] || '');
+        const country = rowObj['country'] || rowObj['country '] || '';
+        if(country){
+          out[country] = { region: (rowObj['region']||'').toUpperCase(), web: rowObj['web presence'] || rowObj['web'] || rowObj['web_presence'] || '' };
+        }
+      });
+      return out;
+    });
+}
+
 function loadMemberLinks(){
   fetch('members.json')
     .then(r=> r.ok ? r.json() : Promise.reject('no json'))
     .then(data=>{ MEMBER_LINKS = data || {}; finalizeMembers(); })
-    .catch(()=>{ MEMBER_LINKS = {}; finalizeMembers(); });
+    .catch(()=>{
+      if(SHEET_GVIZ_URL){
+        importMembersFromGviz(SHEET_GVIZ_URL).then(data=>{ MEMBER_LINKS = data || {}; finalizeMembers(); }).catch(()=>{ MEMBER_LINKS = {}; finalizeMembers(); });
+      } else {
+        MEMBER_LINKS = {}; finalizeMembers();
+      }
+    });
 }
 
 loadMemberLinks();
