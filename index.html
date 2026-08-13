@@ -255,8 +255,8 @@
 <!-- utility -->
 <div class="util">
   <div class="wrap">
-    <div class="util-links">
-      <a href="#">English</a><a href="#">हिन्दी</a><a href="#">Français</a><a href="#">Deutsch</a>
+      <div class="util-links">
+      <a href="#" class="lang-link" data-lang="en">English</a><a href="#" class="lang-link" data-lang="hi">हिन्दी</a><a href="#" class="lang-link" data-lang="fr">Français</a><a href="#" class="lang-link" data-lang="de">Deutsch</a>
     </div>
     <div class="util-links">
       <a href="#">Member federation login</a><a href="#">Media centre</a><a href="#">Contact</a>
@@ -282,16 +282,16 @@
       <span class="crest-txt">World Carrom<br>Federation<span>Est. MMXXVI</span></span>
     </a>
     <nav class="primary" aria-label="Primary">
-      <a href="#competitions">Competitions</a>
-      <a href="#rankings">Rankings</a>
+      <a href="#competitions" data-i18n="nav.competitions">Competitions</a>
+      <a href="#rankings" data-i18n="nav.rankings">Rankings</a>
       <div class="members-dropdown">
         <button id="members-toggle" aria-expanded="false" aria-controls="members-menu">Members ▾</button>
         <div id="members-menu" class="dropdown-menu" role="menu">
           <!-- member items populated by script -->
         </div>
       </div>
-      <a href="#governance">Governance</a>
-      <a href="#news">News</a>
+      <a href="#governance" data-i18n="nav.governance">Governance</a>
+      <a href="#news" data-i18n="nav.news">News</a>
     </nav>
     <button class="burger" id="burger" aria-expanded="false">Menu</button>
   </div>
@@ -304,12 +304,12 @@
     <span class="pocket bl"></span><span class="pocket br"></span>
     <div class="hero-grid">
       <div>
-        <p class="eyebrow">The apex body for the game of carrom</p>
-        <h1>One board.<br>One code.<br><em>Every nation.</em></h1>
-        <p class="lede">The World Carrom Federation writes the Laws of the Game, sanctions the World Championship, and certifies the ranking of every player in every member nation.</p>
+        <p class="eyebrow" data-i18n="hero.eyebrow">The apex body for the game of carrom</p>
+          <h1 data-i18n="hero.h1">One board.<br>One code.<br><em>Every nation.</em></h1>
+          <p class="lede" data-i18n="hero.lede">The World Carrom Federation writes the Laws of the Game, sanctions the World Championship, and certifies the ranking of every player in every member nation.</p>
         <div class="hero-cta">
-          <a class="btn btn--solid" href="#competitions">World Championship 2026</a>
-          <a class="btn" href="#members">Affiliate your federation</a>
+          <a class="btn btn--solid" href="#competitions" data-i18n="btn.world">World Championship 2026</a>
+          <a class="btn" href="#members" data-i18n="btn.affiliate">Affiliate your federation</a>
         </div>
       </div>
 
@@ -396,9 +396,9 @@
 <!-- competitions -->
 <section class="band band--paper" id="competitions">
   <div class="wrap">
-    <div class="sec-head">
-      <div><span class="eyebrow">Competitions</span><h2>On the board now</h2></div>
-      <a class="sec-link" href="#">Full calendar</a>
+      <div class="sec-head">
+      <div><span class="eyebrow" data-i18n="competitions.eyebrow">Competitions</span><h2 data-i18n="competitions.h2">On the board now</h2></div>
+      <a class="sec-link" href="#" data-i18n="competitions.calendar">Full calendar</a>
     </div>
     <div class="fixtures">
       <article class="fx">
@@ -427,8 +427,8 @@
 <section class="band band--tint" id="rankings">
   <div class="wrap">
     <div class="sec-head">
-      <div><span class="eyebrow">World rankings</span><h2>The order of play</h2></div>
-      <a class="sec-link" href="#">How points are earned</a>
+      <div><span class="eyebrow" data-i18n="rankings.eyebrow">World rankings</span><h2 data-i18n="rankings.h2">The order of play</h2></div>
+      <a class="sec-link" href="#" data-i18n="rankings.info">How points are earned</a>
     </div>
     <div class="rank-shell">
       <div>
@@ -455,9 +455,9 @@
 <!-- members -->
 <section class="band band--paper" id="members">
   <div class="wrap">
-    <div class="sec-head">
-      <div><span class="eyebrow">Member federations</span><h2>Five confederations</h2></div>
-      <a class="sec-link" href="#">Affiliation process</a>
+      <div class="sec-head">
+      <div><span class="eyebrow" data-i18n="members.eyebrow">Member federations</span><h2 data-i18n="members.h2">Five confederations</h2></div>
+      <a class="sec-link" href="#" data-i18n="members.affiliation">Affiliation process</a>
     </div>
     <div class="confeds">
       <div class="cf"><b>24</b><div class="cf-name">Asia</div><p class="cf-sub">The sport's heartland and the deepest ranked field.</p></div>
@@ -503,9 +503,9 @@
     </div>
     <div class="pillars">
       <div class="pl">
-        <h3>Laws of the Game</h3>
-        <p>One published rulebook, one board specification, one striker standard — binding at every sanctioned event from a club night to the World Championship.</p>
-        <a href="#" id="read-laws-link">Read the Laws (2004 edition)</a>
+        <h3 data-i18n="governance.laws.title">Laws of the Game</h3>
+        <p data-i18n="governance.laws.copy">One published rulebook, one board specification, one striker standard — binding at every sanctioned event from a club night to the World Championship.</p>
+        <a href="#" id="read-laws-link" data-i18n="governance.laws.link">Read the Laws (2004 edition)</a>
       </div>
       <div class="pl">
         <h3>Integrity</h3>
@@ -717,5 +717,71 @@ document.getElementById('laws-open-new').addEventListener('click', function(){
 // close on Escape
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ document.getElementById('laws-modal').style.display = 'none'; } });
 </script>
+
+<script>
+// Simple client-side translations
+const TRANSLATIONS = {
+  en: {
+    'hero.eyebrow':'The apex body for the game of carrom',
+    'hero.h1':'One board.<br>One code.<br><em>Every nation.</em>',
+    'hero.lede':'The World Carrom Federation writes the Laws of the Game, sanctions the World Championship, and certifies the ranking of every player in every member nation.',
+    'btn.world':'World Championship 2026',
+    'btn.affiliate':'Affiliate your federation',
+    'competitions.eyebrow':'Competitions','competitions.h2':'On the board now','competitions.calendar':'Full calendar',
+    'rankings.eyebrow':'World rankings','rankings.h2':'The order of play','rankings.info':'How points are earned',
+    'members.eyebrow':'Member federations','members.h2':'Five confederations','members.affiliation':'Affiliation process',
+    'governance.laws.title':'Laws of the Game','governance.laws.copy':'One published rulebook, one board specification, one striker standard — binding at every sanctioned event from a club night to the World Championship.','governance.laws.link':'Read the Laws (2004 edition)',
+    'nav.competitions':'Competitions','nav.rankings':'Rankings','nav.governance':'Governance','nav.news':'News'
+  },
+  hi: {
+    'hero.eyebrow':'कैरोम खेलने के लिए सर्वोच्च निकाय',
+    'hero.h1':'एक बोर्ड।<br>एक कोड।<br><em>हर राष्ट्र।</em>',
+    'hero.lede':'वर्ल्ड कैरोम फेडरेशन खेल के नियम बनाता है, वर्ल्ड चैंपियनशिप को स्वीकृत करता है, और प्रत्येक सदस्य राष्ट्र में हर खिलाड़ी की रैंकिंग प्रमाणित करता है।',
+    'btn.world':'वर्ल्ड चैंपियनशिप 2026','btn.affiliate':'अपनी महासंघ को संबद्ध करें',
+    'competitions.eyebrow':'प्रतियोगिताएँ','competitions.h2':'अब बोर्ड पर','competitions.calendar':'पूरा कैलेंडर',
+    'rankings.eyebrow':'विश्व रैंकिंग','rankings.h2':'खेल का क्रम','rankings.info':'अंक कैसे मिलते हैं',
+    'members.eyebrow':'सदस्य महासंघ','members.h2':'पाँच संवित्रण','members.affiliation':'अधिभोग प्रक्रिया',
+    'governance.laws.title':'खेल के नियम','governance.laws.copy':'एक प्रकाशित नियमावली, एक बोर्ड विनिर्देश, एक स्ट्राइकर मानक — हर अधिकृत आयोजन पर बाध्यकारी।','governance.laws.link':'नियम पढ़ें (2004 संस्करण)',
+    'nav.competitions':'प्रतियोगिताएँ','nav.rankings':'रैंकिंग','nav.governance':'शासन','nav.news':'समाचार'
+  },
+  fr: {
+    'hero.eyebrow':'L\'organe suprême pour le jeu de carrom',
+    'hero.h1':'Un plateau.<br>Un code.<br><em>Toutes les nations.</em>',
+    'hero.lede':'La World Carrom Federation rédige les Règles du Jeu, sanctionne le Championnat du Monde et certifie le classement de chaque joueur dans chaque nation membre.',
+    'btn.world':'Championnat du Monde 2026','btn.affiliate':'Affiliez votre fédération',
+    'competitions.eyebrow':'Compétitions','competitions.h2':'Sur le plateau maintenant','competitions.calendar':'Calendrier complet',
+    'rankings.eyebrow':'Classements mondiaux','rankings.h2':'L\'ordre de jeu','rankings.info':'Comment les points sont gagnés',
+    'members.eyebrow':'Fédérations membres','members.h2':'Cinq confédérations','members.affiliation':'Processus d\'affiliation',
+    'governance.laws.title':'Règles du Jeu','governance.laws.copy':'Un livre de règles publié, une spécification de plateau, une norme de striker — contraignants lors de tout événement agréé.',
+    'governance.laws.link':'Lire les Règles (édition 2004)',
+    'nav.competitions':'Compétitions','nav.rankings':'Classements','nav.governance':'Gouvernance','nav.news':'Actualités'
+  },
+  de: {
+    'hero.eyebrow':'Die oberste Instanz für das Spiel Carrom',
+    'hero.h1':'Ein Brett.<br>Ein Kodex.<br><em>Jede Nation.</em>',
+    'hero.lede':'Die World Carrom Federation schreibt die Spielregeln, genehmigt die Weltmeisterschaft und zertifiziert die Rangliste jedes Spielers in jedem Mitgliedsland.',
+    'btn.world':'Weltmeisterschaft 2026','btn.affiliate':'Ihr Verband anschließen',
+    'competitions.eyebrow':'Wettbewerbe','competitions.h2':'Jetzt auf dem Brett','competitions.calendar':'Voller Kalender',
+    'rankings.eyebrow':'Welt-Ranglisten','rankings.h2':'Die Spielreihenfolge','rankings.info':'Wie Punkte vergeben werden',
+    'members.eyebrow':'Mitgliedsverbände','members.h2':'Fünf Konföderationen','members.affiliation':'Zulassungsverfahren',
+    'governance.laws.title':'Spielregeln','governance.laws.copy':'Ein veröffentlichtes Regelwerk, eine Brettspezifikation, ein Striker-Standard — verbindlich bei jedem sanktionierten Ereignis.',
+    'governance.laws.link':'Regeln lesen (2004 Ausgabe)',
+    'nav.competitions':'Wettbewerbe','nav.rankings':'Ranglisten','nav.governance':'Verwaltung','nav.news':'Nachrichten'
+  }
+};
+
+function translateTo(lang){
+  const map = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(map[key]){
+      if(el.tagName.toLowerCase()==='h1') el.innerHTML = map[key]; else el.textContent = map[key].replace(/<br>/g,'\n');
+    }
+  });
+}
+
+document.querySelectorAll('.lang-link').forEach(a=> a.addEventListener('click', e=>{ e.preventDefault(); translateTo(a.dataset.lang); }));
+</script>
 </body>
 </html>
+
