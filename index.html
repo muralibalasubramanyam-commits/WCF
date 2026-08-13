@@ -188,6 +188,11 @@
   .region-filters{display:flex;gap:8px;flex-wrap:wrap}
   .region-btn{background:transparent;border:1px solid rgba(23,20,16,.06);padding:6px 10px;border-radius:999px;cursor:pointer;font-family:var(--mono);font-size:12px}
   .region-btn.active{background:var(--brass);color:#14110E;border-color:var(--brass)}
+  /* animation for filtering */
+  .roll span{display:block;transition:all .32s cubic-bezier(.2,.9,.2,1);will-change:opacity,transform,max-height;margin}
+  .roll span.hidden-region{opacity:0;transform:translateY(6px) scale(.99);max-height:0;margin:0;padding:0;overflow:hidden}
+  #members-menu a.member-item{transition:opacity .25s ease,transform .25s ease}
+  #members-menu a.member-item.hidden-region{opacity:0;transform:translateX(8px);pointer-events:none}
 
   /* ————— pillars ————— */
   .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,3vw,44px)}
@@ -792,12 +797,14 @@ function importMembersFromGviz(url){
 }
 
 function loadMemberLinks(){
+  // prefer local members.json, otherwise fall back to SHEET_GVIZ_URL
   fetch('members.json')
     .then(r=> r.ok ? r.json() : Promise.reject('no json'))
     .then(data=>{ MEMBER_LINKS = data || {}; finalizeMembers(); })
     .catch(()=>{
-      if(SHEET_GVIZ_URL){
-        importMembersFromGviz(SHEET_GVIZ_URL).then(data=>{ MEMBER_LINKS = data || {}; finalizeMembers(); }).catch(()=>{ MEMBER_LINKS = {}; finalizeMembers(); });
+      const stored = localStorage.getItem('wcf_sheet_gviz') || SHEET_GVIZ_URL;
+      if(stored){
+        importMembersFromGviz(stored).then(data=>{ MEMBER_LINKS = data || {}; finalizeMembers(); }).catch(()=>{ MEMBER_LINKS = {}; finalizeMembers(); });
       } else {
         MEMBER_LINKS = {}; finalizeMembers();
       }
@@ -805,6 +812,32 @@ function loadMemberLinks(){
 }
 
 loadMemberLinks();
+
+// Admin: allow pasting a GViz URL to import live from Google Sheets
+function setupSheetImporter(){
+  const container = document.createElement('div');
+  container.style.display='flex';container.style.gap='8px';container.style.marginTop='6px';
+  const input = document.createElement('input'); input.placeholder='Google Sheets GViz URL (optional)'; input.style.flex='1'; input.className='sheet-gviz-input';
+  const btn = document.createElement('button'); btn.textContent='Import sheet'; btn.className='region-btn';
+  const status = document.createElement('span'); status.style.fontSize='13px'; status.style.color='var(--muted)';
+  container.appendChild(input); container.appendChild(btn); container.appendChild(status);
+  const controls = document.querySelector('.member-controls'); if(controls) controls.appendChild(container);
+  // load stored
+  const stored = localStorage.getItem('wcf_sheet_gviz'); if(stored) input.value = stored;
+  btn.addEventListener('click', ()=>{
+    const url = input.value.trim();
+    if(!url) { status.textContent='Enter a GViz URL first'; return; }
+    status.textContent='Importing...';
+    importMembersFromGviz(url).then(data=>{
+      MEMBER_LINKS = data || {};
+      localStorage.setItem('wcf_sheet_gviz', url);
+      finalizeMembers();
+      status.textContent='Imported and applied';
+    }).catch(err=>{ console.error(err); status.textContent='Import failed'; });
+  });
+}
+
+setupSheetImporter();
 
 // dropdown toggle behaviour
 const toggle = document.getElementById('members-toggle');
