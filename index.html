@@ -484,7 +484,6 @@
         <button class="region-btn" data-region="ASIA">Asia</button>
         <button class="region-btn" data-region="EUR">Europe</button>
         <button class="region-btn" data-region="NA">Americas</button>
-        <button class="region-btn" data-region="AFR">Africa</button>
         <button class="region-btn" data-region="PAC">Oceania/Pacific</button>
         <button class="region-btn" data-region="ME">Middle East</button>
       </div>
@@ -756,7 +755,7 @@ function computeRegionButtonCounts(confedCounts){
     } else if(code === 'ASIA') btn.textContent = `Asia (${confedCounts[0]||0})`;
     else if(code === 'EUR') btn.textContent = `Europe (${confedCounts[1]||0})`;
     else if(code === 'NA') btn.textContent = `Americas (${confedCounts[2]||0})`;
-    else if(code === 'AFR') btn.textContent = `Africa (${confedCounts[3]||0})`;
+    // Africa filter removed from UI
     else if(code === 'PAC') btn.textContent = `Oceania (${confedCounts[4]||0})`;
     else if(code === 'ME') btn.textContent = `Middle East (${confedCounts[3]||0})`;
   });
@@ -774,6 +773,32 @@ function finalizeMembers(){
 const SHEET_GVIZ_URL = ""; // e.g. https://docs.google.com/spreadsheets/d/ SHEET_ID /gviz/tq?gid=0
 
 function importMembersFromGviz(url){
+  // support both GViz JSON and published HTML (pubhtml) endpoints
+  if(url.includes('pubhtml')){
+    return fetch(url)
+      .then(r=> r.ok ? r.text() : Promise.reject('no sheet'))
+      .then(t=>{
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(t, 'text/html');
+        const table = doc.querySelector('table.waffle') || doc.querySelector('table');
+        if(!table) return {};
+        const rows = Array.from(table.querySelectorAll('tr'));
+        if(rows.length < 2) return {};
+        const headerCells = Array.from(rows.shift().querySelectorAll('th,td'));
+        const cols = headerCells.map(h=> (h.textContent||'').trim().toLowerCase());
+        const out = {};
+        rows.forEach(r=>{
+          const cells = Array.from(r.querySelectorAll('td'));
+          const rowObj = {};
+          cols.forEach((col,i)=> rowObj[col] = (cells[i] && cells[i].textContent||'').trim());
+          const country = rowObj['country'] || rowObj['country '] || '';
+          if(country){
+            out[country] = { region: (rowObj['region']||'').toUpperCase(), web: rowObj['web presence'] || rowObj['web'] || rowObj['web_presence'] || '' };
+          }
+        });
+        return out;
+      });
+  }
   return fetch(url)
     .then(r=> r.ok ? r.text() : Promise.reject('no sheet'))
     .then(t=>{
@@ -813,31 +838,7 @@ function loadMemberLinks(){
 
 loadMemberLinks();
 
-// Admin: allow pasting a GViz URL to import live from Google Sheets
-function setupSheetImporter(){
-  const container = document.createElement('div');
-  container.style.display='flex';container.style.gap='8px';container.style.marginTop='6px';
-  const input = document.createElement('input'); input.placeholder='Google Sheets GViz URL (optional)'; input.style.flex='1'; input.className='sheet-gviz-input';
-  const btn = document.createElement('button'); btn.textContent='Import sheet'; btn.className='region-btn';
-  const status = document.createElement('span'); status.style.fontSize='13px'; status.style.color='var(--muted)';
-  container.appendChild(input); container.appendChild(btn); container.appendChild(status);
-  const controls = document.querySelector('.member-controls'); if(controls) controls.appendChild(container);
-  // load stored
-  const stored = localStorage.getItem('wcf_sheet_gviz'); if(stored) input.value = stored;
-  btn.addEventListener('click', ()=>{
-    const url = input.value.trim();
-    if(!url) { status.textContent='Enter a GViz URL first'; return; }
-    status.textContent='Importing...';
-    importMembersFromGviz(url).then(data=>{
-      MEMBER_LINKS = data || {};
-      localStorage.setItem('wcf_sheet_gviz', url);
-      finalizeMembers();
-      status.textContent='Imported and applied';
-    }).catch(err=>{ console.error(err); status.textContent='Import failed'; });
-  });
-}
-
-setupSheetImporter();
+// Admin sheet importer UI removed per UX preference
 
 // dropdown toggle behaviour
 const toggle = document.getElementById('members-toggle');
