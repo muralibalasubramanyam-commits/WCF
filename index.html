@@ -505,7 +505,7 @@
       <div class="pl">
         <h3>Laws of the Game</h3>
         <p>One published rulebook, one board specification, one striker standard — binding at every sanctioned event from a club night to the World Championship.</p>
-        <a href="laws-of-carrom-2004-edition.pdf" target="_blank" rel="noopener" download>Read the Laws (2004 edition)</a>
+        <a href="#" id="read-laws-link">Read the Laws (2004 edition)</a>
       </div>
       <div class="pl">
         <h3>Integrity</h3>
@@ -682,6 +682,40 @@ document.addEventListener('click', e=>{
     toggle.setAttribute('aria-expanded','false');
   }
 });
+</script>
+
+<!-- Laws PDF modal -->
+<div id="laws-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:120;align-items:center;justify-content:center;padding:24px">
+  <div style="width:min(1100px,98%);height:80vh;background:#fff;border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #eee;background:#f7f7f7">
+      <strong style="font-family:var(--mono)">Laws of the Game</strong>
+      <input id="laws-search" placeholder="Tip: use your browser's find (Ctrl+F) to search inside the PDF" aria-label="Search tip" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:4px;background:#fff;color:#333" readonly>
+      <a id="laws-download" href="laws-of-carrom-2004-edition.pdf" download style="padding:8px 12px;border-radius:4px;background:var(--brass);color:#14110E;text-decoration:none;font-weight:600">Download PDF</a>
+      <button id="laws-open-new" style="padding:8px 12px;border-radius:4px;background:#eee;border:0;cursor:pointer">Open in new tab</button>
+      <button id="laws-close" aria-label="Close" style="background:none;border:0;font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div style="flex:1;overflow:auto;background:#333">
+      <iframe id="laws-iframe" src="laws-of-carrom-2004-edition.pdf" style="width:100%;height:100%;border:0;background:#fff" title="Laws PDF viewer"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+// Open modal when Read the Laws is clicked
+document.getElementById('read-laws-link').addEventListener('click', function(e){
+  e.preventDefault();
+  document.getElementById('laws-modal').style.display = 'flex';
+  // focus hint input so user sees search tip
+  document.getElementById('laws-search').focus();
+});
+document.getElementById('laws-close').addEventListener('click', function(){
+  document.getElementById('laws-modal').style.display = 'none';
+});
+document.getElementById('laws-open-new').addEventListener('click', function(){
+  window.open('laws-of-carrom-2004-edition.pdf','_blank');
+});
+// close on Escape
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ document.getElementById('laws-modal').style.display = 'none'; } });
 </script>
 </body>
 </html>
