@@ -737,6 +737,24 @@ function updateConfedCounts(){
     const b = cfEls[i].querySelector('b');
     if(b) b.textContent = (i<counts.length?counts[i]:'--');
   }
+  // also update region filter button counts
+  computeRegionButtonCounts(counts);
+}
+
+function computeRegionButtonCounts(confedCounts){
+  // confedCounts: [ASIA,EUR,NA,ME,PAC,ALL]
+  const mapping = { 'ASIA':0, 'EUR':1, 'NA':2, 'ME':3, 'PAC':4 };
+  document.querySelectorAll('.region-btn').forEach(btn=>{
+    const code = (btn.dataset.region||'').toUpperCase();
+    if(code === ''){
+      btn.textContent = `All (${confedCounts[5]||0})`;
+    } else if(code === 'ASIA') btn.textContent = `Asia (${confedCounts[0]||0})`;
+    else if(code === 'EUR') btn.textContent = `Europe (${confedCounts[1]||0})`;
+    else if(code === 'NA') btn.textContent = `Americas (${confedCounts[2]||0})`;
+    else if(code === 'AFR') btn.textContent = `Africa (${confedCounts[3]||0})`;
+    else if(code === 'PAC') btn.textContent = `Oceania (${confedCounts[4]||0})`;
+    else if(code === 'ME') btn.textContent = `Middle East (${confedCounts[3]||0})`;
+  });
 }
 
 // after loading member links, populate roll and counts
