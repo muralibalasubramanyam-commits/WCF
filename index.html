@@ -663,15 +663,7 @@ function populateMembersMenu(){
   });
 }
 
-// populate menu after MEMBER_LINKS is loaded (fallback if fetch fails)
-function loadMemberLinks(){
-  fetch('members.json')
-    .then(r=> r.ok ? r.json() : Promise.reject('no json'))
-    .then(data=>{ MEMBER_LINKS = data || {}; populateMembersMenu(); })
-    .catch(()=>{ MEMBER_LINKS = {}; populateMembersMenu(); });
-}
 
-loadMemberLinks();
 
 // Populate the members roll with region badges and update confederation counts
 function populateMembersRoll(){
