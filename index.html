@@ -183,6 +183,11 @@
     column-count:4;column-gap:34px;border-top:1px solid rgba(23,20,16,.14);padding-top:26px}
   .roll span{display:block}
   .flag{width:24px;height:18px;margin-right:10px;vertical-align:middle;display:inline-block}
+  .region-badge{display:inline-block;margin-left:8px;padding:3px 8px;background:rgba(0,0,0,.06);border-radius:12px;font-size:12px;color:var(--muted);vertical-align:middle}
+  .member-controls{display:flex;align-items:center;gap:12px;margin:18px 0}
+  .region-filters{display:flex;gap:8px;flex-wrap:wrap}
+  .region-btn{background:transparent;border:1px solid rgba(23,20,16,.06);padding:6px 10px;border-radius:999px;cursor:pointer;font-family:var(--mono);font-size:12px}
+  .region-btn.active{background:var(--brass);color:#14110E;border-color:var(--brass)}
 
   /* ————— pillars ————— */
   .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,3vw,44px)}
@@ -466,31 +471,20 @@
       <div class="cf"><b>8</b><div class="cf-name">Africa</div><p class="cf-sub">Priority region for the development fund.</p></div>
       <div class="cf"><b>6</b><div class="cf-name">Oceania</div><p class="cf-sub">Newest confederation, admitted in full in 2026.</p></div>
     </div>
-    <div class="roll">
-      <span><img class="flag" src="https://flagcdn.com/24x18/au.png" alt="Australia flag" loading="lazy">Australia</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/bd.png" alt="Bangladesh flag" loading="lazy">Bangladesh</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/ca.png" alt="Canada flag" loading="lazy">Canada</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/cz.png" alt="Czech Republic flag" loading="lazy">Czech Republic</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/fr.png" alt="France flag" loading="lazy">France</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/de.png" alt="Germany flag" loading="lazy">Germany</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/hk.png" alt="Hong Kong flag" loading="lazy">Hong Kong</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/in.png" alt="India flag" loading="lazy">India</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/it.png" alt="Italy flag" loading="lazy">Italy</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/jp.png" alt="Japan flag" loading="lazy">Japan</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/kr.png" alt="South Korea flag" loading="lazy">South Korea</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/my.png" alt="Malaysia flag" loading="lazy">Malaysia</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/mv.png" alt="Maldives flag" loading="lazy">Maldives</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/nz.png" alt="New Zealand flag" loading="lazy">New Zealand</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/pk.png" alt="Pakistan flag" loading="lazy">Pakistan</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/pl.png" alt="Poland flag" loading="lazy">Poland</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/qa.png" alt="Qatar flag" loading="lazy">Qatar</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/sa.png" alt="Saudi Arabia flag" loading="lazy">Saudi Arabia</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/sg.png" alt="Singapore flag" loading="lazy">Singapore</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/lk.png" alt="Sri Lanka flag" loading="lazy">Sri Lanka</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/th.png" alt="Thailand flag" loading="lazy">Thailand</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/ae.png" alt="UAE flag" loading="lazy">UAE</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/gb.png" alt="United Kingdom flag" loading="lazy">United Kingdom</span>
-      <span><img class="flag" src="https://flagcdn.com/24x18/us.png" alt="United States of America flag" loading="lazy">United States of America</span>
+    <div class="member-controls">
+      <div class="label">Show:</div>
+      <div class="region-filters">
+        <button class="region-btn active" data-region="">All</button>
+        <button class="region-btn" data-region="ASIA">Asia</button>
+        <button class="region-btn" data-region="EUR">Europe</button>
+        <button class="region-btn" data-region="NA">Americas</button>
+        <button class="region-btn" data-region="AFR">Africa</button>
+        <button class="region-btn" data-region="PAC">Oceania/Pacific</button>
+        <button class="region-btn" data-region="ME">Middle East</button>
+      </div>
+    </div>
+    <div class="roll" id="members-roll">
+      <!-- members roll populated dynamically with region badges -->
     </div>
   </div>
 </section>
@@ -633,7 +627,16 @@ function populateMembersMenu(){
   const menu = document.getElementById('members-menu');
   menu.innerHTML = '';
   MEMBERS.forEach(m=>{
-    const href = MEMBER_LINKS[m.name] && MEMBER_LINKS[m.name].trim() ? MEMBER_LINKS[m.name].trim() : '#members';
+    // support both legacy string mapping and new object mapping { region, web }
+    let href = '#members';
+    let region = '';
+    const entry = MEMBER_LINKS[m.name];
+    if(typeof entry === 'string'){
+      href = entry.trim() || '#members';
+    } else if(entry && typeof entry === 'object'){
+      href = (entry.web || entry.url || '').trim() || '#members';
+      region = entry.region || entry.Region || '';
+    }
     const a = document.createElement('a');
     a.className = 'member-item';
     a.setAttribute('role','menuitem');
@@ -654,6 +657,7 @@ function populateMembersMenu(){
     span.textContent = m.name;
     a.appendChild(img);
     a.appendChild(span);
+    if(region) a.setAttribute('data-region', region);
     menu.appendChild(a);
   });
 }
@@ -664,6 +668,96 @@ function loadMemberLinks(){
     .then(r=> r.ok ? r.json() : Promise.reject('no json'))
     .then(data=>{ MEMBER_LINKS = data || {}; populateMembersMenu(); })
     .catch(()=>{ MEMBER_LINKS = {}; populateMembersMenu(); });
+}
+
+loadMemberLinks();
+
+// Populate the members roll with region badges and update confederation counts
+function populateMembersRoll(){
+  const roll = document.getElementById('members-roll');
+  roll.innerHTML = '';
+  MEMBERS.forEach(m=>{
+  const entry = MEMBER_LINKS[m.name];
+  let region = '';
+  if(entry && typeof entry === 'object') region = (entry.region || entry.Region || '').toUpperCase();
+  else region = '';
+  const span = document.createElement('span');
+  span.setAttribute('data-region', region);
+    const img = document.createElement('img');
+    img.className = 'flag';
+    img.src = `https://flagcdn.com/24x18/${m.code}.png`;
+    img.alt = `${m.name} flag`;
+    img.loading = 'lazy';
+    img.onerror = function(){ this.onerror = null; this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="16"><rect width="100%" height="100%" fill="%23888"/></svg>'; };
+    span.appendChild(img);
+    const txt = document.createTextNode(m.name);
+    span.appendChild(txt);
+    if(region){
+      const b = document.createElement('small');
+      b.className = 'region-badge';
+      b.textContent = region;
+      span.appendChild(b);
+    }
+    roll.appendChild(span);
+  });
+}
+
+// filter members in roll and dropdown by region code (empty = all)
+function filterByRegion(regionCode){
+  const roll = document.getElementById('members-roll');
+  Array.from(roll.children).forEach(ch=>{
+    const r = (ch.getAttribute('data-region')||'').toUpperCase();
+    ch.style.display = (!regionCode || regionCode === '' || r === regionCode) ? 'block' : 'none';
+  });
+  // dropdown
+  document.querySelectorAll('#members-menu a.member-item').forEach(a=>{
+    const r = (a.getAttribute('data-region')||'').toUpperCase();
+    a.style.display = (!regionCode || regionCode === '' || r === regionCode) ? '' : 'none';
+  });
+  // active button
+  document.querySelectorAll('.region-btn').forEach(b=> b.classList.toggle('active', b.dataset.region === (regionCode||'')));
+}
+
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('.region-btn');
+  if(btn){
+    const code = btn.dataset.region || '';
+    filterByRegion(code);
+  }
+});
+
+function updateConfedCounts(){
+  // mapping of region codes to confed index in DOM (.confeds .cf order)
+  const map = { 'ASIA':0, 'PAC':4, 'NA':2, 'EUR':1, 'ME':0, 'AFR':3 };
+  const counts = [0,0,0,0,0];
+  MEMBERS.forEach(m=>{
+    const entry = MEMBER_LINKS[m.name];
+    let region = '';
+    if(entry && typeof entry === 'object') region = (entry.region||entry.Region||'').toUpperCase();
+    if(!region && typeof entry === 'string') region = '';
+    const idx = map[region] !== undefined ? map[region] : 0;
+    counts[idx]++;
+  });
+  const cfEls = document.querySelectorAll('.confeds .cf');
+  for(let i=0;i<cfEls.length;i++){
+    const b = cfEls[i].querySelector('b');
+    if(b) b.textContent = counts[i];
+  }
+}
+
+// after loading member links, populate roll and counts
+function finalizeMembers(){
+  populateMembersMenu();
+  populateMembersRoll();
+  updateConfedCounts();
+}
+
+// override loadMemberLinks to call finalizeMembers instead of just populateMembersMenu
+function loadMemberLinks(){
+  fetch('members.json')
+    .then(r=> r.ok ? r.json() : Promise.reject('no json'))
+    .then(data=>{ MEMBER_LINKS = data || {}; finalizeMembers(); })
+    .catch(()=>{ MEMBER_LINKS = {}; finalizeMembers(); });
 }
 
 loadMemberLinks();
