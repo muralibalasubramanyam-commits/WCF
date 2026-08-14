@@ -307,8 +307,21 @@
   </div>
 </header>
 
-<!-- hero -->
-<section class="hero" id="top">
+    <!-- Affiliation image modal -->
+    <div id="affiliation-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:125;align-items:center;justify-content:center;padding:24px">
+      <div style="width:min(1000px,96%);max-width:1100px;background:#fff;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;height:auto">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #eee;background:#f7f7f7">
+          <strong style="font-family:var(--mono)">Affiliation process</strong>
+          <a id="affiliation-download" href="wcf-affiliation-process.jpg" download style="padding:8px 12px;border-radius:4px;background:var(--brass);color:#14110E;text-decoration:none;font-weight:600;margin-left:8px">Download</a>
+          <button id="affiliation-close" aria-label="Close" style="margin-left:auto;background:none;border:0;font-size:20px;cursor:pointer">✕</button>
+        </div>
+        <div style="padding:14px;display:flex;align-items:center;justify-content:center;background:#fff">
+          <img id="affiliation-img" src="wcf-affiliation-process.jpg" alt="WCF Affiliation Process" style="max-width:100%;height:auto;border:1px solid #eee;border-radius:4px">
+        </div>
+      </div>
+      </div>
+
+    <section class="hero" id="top">
   <div class="board-frame">
     <span class="pocket tl"></span><span class="pocket tr"></span>
     <span class="pocket bl"></span><span class="pocket br"></span>
@@ -535,7 +548,7 @@
       </a>
       <div class="stack">
         <a class="item" href="#"><span class="eyebrow eyebrow--dark">6 August · Rankings</span><h3>Ranking roll-off shortened to 52 weeks</h3><p>The change takes effect with the Monday list of 7 September.</p></a>
-        <a class="item" href="#"><span class="eyebrow eyebrow--dark">2 August · Development</span><h3>Twelve federations receive board grants</h3><p>First allocation from the development fund reaches eight African members.</p></a>
+        <a class="item" href="#"><span class="eyebrow eyebrow--dark">2 August · Development</span><h3>Twelve federations receive board grants</h3><p>First allocation from the development fund reaches eight member federations.</p></a>
         <a class="item" href="#"><span class="eyebrow eyebrow--dark">28 July · Officiating</span><h3>Referee certification opens to all members</h3><p>Level 1 modules are now available in four languages.</p></a>
       </div>
     </div>
@@ -552,9 +565,22 @@
       <div><h4>Competitions</h4><ul>
         <li><a href="#">World Championship</a></li><li><a href="#">World Cup</a></li>
         <li><a href="#">Continental cups</a></li><li><a href="#">Calendar</a></li><li><a href="#">Results archive</a></li></ul></div>
-      <div><h4>The federation</h4><ul>
+      <div><h4>ABOUT WCF</h4><ul>
         <li><a href="#">Statutes</a></li><li><a href="#">Executive committee</a></li>
-        <li><a href="#">Congress</a></li><li><a href="#">Annual report</a></li><li><a href="#">Careers</a></li></ul></div>
+        <li><a href="#">Congress</a></li><li><a href="#">Annual report</a></li>
+        <li id="admin-controls-li" style="list-style:none;margin-top:6px;padding-top:6px;border-top:1px dashed rgba(0,0,0,.04)">
+          <details style="font-size:13px">
+            <summary style="cursor:pointer">Admin controls</summary>
+            <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px">
+              <input id="admin-modern-url" placeholder="Modern Laws URL (optional)" style="padding:6px;border:1px solid #ddd;border-radius:4px">
+              <div style="display:flex;gap:8px">
+                <button id="admin-set-modern" class="region-btn" style="padding:6px 8px">Set modern laws URL</button>
+                <button id="admin-clear-sheet" class="region-btn" style="padding:6px 8px">Clear stored sheet URL</button>
+              </div>
+            </div>
+          </details>
+        </li>
+        <li><a href="#">Careers</a></li></ul></div>
       <div><h4>Confederations</h4><ul>
         <li><a href="#">Asia</a></li><li><a href="#">Europe</a></li><li><a href="#">Americas</a></li>
         <li><a href="#">Middle East</a></li><li><a href="#">Oceania</a></li><li><a href="#members">All regions</a></li></ul></div>
@@ -863,6 +889,7 @@ document.addEventListener('click', e=>{
       <strong style="font-family:var(--mono)">Laws of the Game</strong>
       <input id="laws-search" placeholder="Tip: use your browser's find (Ctrl+F) to search inside the PDF" aria-label="Search tip" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:4px;background:#fff;color:#333" readonly>
       <a id="laws-download" href="laws-of-carrom-2004-edition.pdf" download style="padding:8px 12px;border-radius:4px;background:var(--brass);color:#14110E;text-decoration:none;font-weight:600">Download PDF</a>
+      <a id="laws-modern" href="#" title="Placeholder: link to modern version" style="padding:8px 12px;border-radius:4px;background:#f0f0f0;border:0;color:#14110E;text-decoration:none;margin-right:6px">Modern version of the Carrom Laws</a>
       <button id="laws-open-new" style="padding:8px 12px;border-radius:4px;background:#eee;border:0;cursor:pointer">Open in new tab</button>
       <button id="laws-close" aria-label="Close" style="background:none;border:0;font-size:20px;cursor:pointer">✕</button>
     </div>
@@ -953,6 +980,43 @@ function translateTo(lang){
 }
 
 document.querySelectorAll('.lang-link').forEach(a=> a.addEventListener('click', e=>{ e.preventDefault(); translateTo(a.dataset.lang); }));
+
+// Admin control handlers (footer admin controls)
+document.addEventListener('DOMContentLoaded', function(){
+  const setBtn = document.getElementById('admin-set-modern');
+  const clearBtn = document.getElementById('admin-clear-sheet');
+  if(setBtn){
+    setBtn.addEventListener('click', function(){
+      const val = (document.getElementById('admin-modern-url')||{}).value || '';
+      if(!val.trim()){ alert('Enter a URL first'); return; }
+      localStorage.setItem('wcf_modern_laws', val.trim());
+      const a = document.getElementById('laws-modern'); if(a) a.href = val.trim();
+      alert('Modern laws URL saved');
+    });
+  }
+  if(clearBtn){
+    clearBtn.addEventListener('click', function(){
+      localStorage.removeItem('wcf_sheet_gviz');
+      alert('Stored sheet URL cleared');
+    });
+  }
+  // populate stored modern laws URL
+  const storedModern = localStorage.getItem('wcf_modern_laws');
+  if(storedModern){ const a=document.getElementById('laws-modern'); if(a) a.href=storedModern; const inp=document.getElementById('admin-modern-url'); if(inp) inp.value=storedModern; }
+
+  // Affiliation modal handlers
+  const affLink = document.querySelector('a.sec-link[data-i18n="members.affiliation"]');
+  const affModal = document.getElementById('affiliation-modal');
+  const affClose = document.getElementById('affiliation-close');
+  if(affLink && affModal){
+    affLink.addEventListener('click', function(e){ e.preventDefault(); affModal.style.display = 'flex'; });
+    if(affClose) affClose.addEventListener('click', function(){ affModal.style.display = 'none'; });
+    // close when clicking outside modal content
+    document.addEventListener('click', function(ev){ if(affModal.style.display === 'flex' && !affModal.querySelector('div').contains(ev.target)) affModal.style.display='none'; });
+    // close on Escape
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') affModal.style.display='none'; });
+  }
+});
 </script>
 </body>
 </html>
