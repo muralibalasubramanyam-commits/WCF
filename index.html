@@ -308,12 +308,13 @@
 </header>
 
     <!-- Affiliation image modal -->
+    <style>#affiliation-modal:target{display:flex !important;}</style>
     <div id="affiliation-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:125;align-items:center;justify-content:center;padding:24px">
       <div style="width:min(1000px,96%);max-width:1100px;background:#fff;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;height:auto">
         <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #eee;background:#f7f7f7">
           <strong style="font-family:var(--mono)">Affiliation process</strong>
           <a id="affiliation-download" href="WCF affiliation process.jpg" download style="padding:8px 12px;border-radius:4px;background:var(--brass);color:#14110E;text-decoration:none;font-weight:600;margin-left:8px">Download</a>
-          <button id="affiliation-close" aria-label="Close" style="margin-left:auto;background:none;border:0;font-size:20px;cursor:pointer">✕</button>
+          <a id="affiliation-close" aria-label="Close" href="#" style="margin-left:auto;background:none;border:0;font-size:20px;cursor:pointer;text-decoration:none;color:inherit" onclick="(function(e){e.preventDefault(); try{ location.hash=''; }catch(err){ var m=document.getElementById('affiliation-modal'); if(m) m.style.display='none'; } return false; })()">✕</a>
         </div>
         <div style="padding:14px;display:flex;align-items:center;justify-content:center;background:#fff">
           <img id="affiliation-img" src="WCF affiliation process.jpg" alt="WCF Affiliation Process" style="max-width:100%;height:auto;border:1px solid #eee;border-radius:4px">
@@ -480,7 +481,7 @@
   <div class="wrap">
       <div class="sec-head">
       <div><span class="eyebrow" data-i18n="members.eyebrow">Member federations</span><h2 data-i18n="members.h2">Five confederations</h2></div>
-      <a id="affiliation-trigger" class="sec-link" href="#" data-i18n="members.affiliation" onclick="(function(e){e.preventDefault();var m=document.getElementById('affiliation-modal'); if(m) m.style.display='flex';})();">Affiliation process</a>
+      <a id="affiliation-trigger" class="sec-link" href="#affiliation-modal" data-i18n="members.affiliation" onclick="(function(e){e.preventDefault();var m=document.getElementById('affiliation-modal'); if(m) m.style.display='flex';})();">Affiliation process</a>
     </div>
     <div class="confeds">
       <div class="cf"><b>24</b><div class="cf-name">Asia</div><p class="cf-sub">The sport's heartland and the deepest ranked field.</p></div>
@@ -1009,12 +1010,12 @@ document.addEventListener('DOMContentLoaded', function(){
   const affModal = document.getElementById('affiliation-modal');
   const affClose = document.getElementById('affiliation-close');
   if(affLink && affModal){
-    affLink.addEventListener('click', function(e){ e.preventDefault(); affModal.style.display = 'flex'; });
-    if(affClose) affClose.addEventListener('click', function(){ affModal.style.display = 'none'; });
+    affLink.addEventListener('click', function(e){ e.preventDefault(); affModal.style.display = 'flex'; location.hash = 'affiliation-modal'; });
+    if(affClose) affClose.addEventListener('click', function(){ affModal.style.display = 'none'; history.replaceState(null,'', location.pathname + location.search); });
     // close when clicking outside modal content
-    document.addEventListener('click', function(ev){ if(affModal.style.display === 'flex' && !affModal.querySelector('div').contains(ev.target)) affModal.style.display='none'; });
+    document.addEventListener('click', function(ev){ if(affModal.style.display === 'flex' && !affModal.querySelector('div').contains(ev.target)){ affModal.style.display='none'; history.replaceState(null,'', location.pathname + location.search); } });
     // close on Escape
-    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') affModal.style.display='none'; });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ affModal.style.display='none'; history.replaceState(null,'', location.pathname + location.search); } });
   }
 });
 </script>
