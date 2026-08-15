@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Laws of Carrom — A Modern Edition</title>
+<meta name="description" content="The official laws of carrom in plain language — searchable, illustrated, and made for everyone from first-time players to tournament umpires." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --espresso:#241812; --espresso-2:#2e1f16;
+    --rosewood:#6e3a28; --rosewood-lt:#8a4a34;
+    --honey:#e7c079; --honey-hi:#f2d89a;
+    --parchment:#efe3c8; --card:#fbf7ec;
+    --ink:#2a1e16; --ink-soft:#5c4a3b;
+    --lacquer:#b23a2b; --lacquer-dk:#8f2d21;
+    --powder:rgba(245,235,215,.14); --powder-2:rgba(245,235,215,.08);
+    --shadow:0 1px 2px rgba(30,18,10,.06),0 8px 24px rgba(30,18,10,.08);
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--parchment);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+  a{color:var(--lacquer-dk);text-decoration:none}
+  a:hover{text-decoration:underline}
+  h1,h2,h3{font-family:"Bricolage Grotesque",serif;font-weight:800;line-height:1.05;letter-spacing:-.01em;margin:0}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+  header.bar{position:sticky;top:0;z-index:50;background:rgba(36,24,18,.94);
+    backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--powder);color:var(--parchment);}
+  .bar-inner{display:flex;align-items:center;gap:16px;padding:11px 22px;max-width:1180px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+  .monogram{width:34px;height:34px;flex:0 0 auto}
+  .brand b{font-family:"Bricolage Grotesque",serif;font-weight:800;font-size:16px;letter-spacing:.02em;color:var(--honey-hi);line-height:1}
+  .brand span{display:block;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(239,227,200,.6);margin-top:3px}
+  .search{margin-left:auto;position:relative;flex:1 1 340px;max-width:460px}
+  .search input{width:100%;padding:10px 14px 10px 40px;border-radius:999px;border:1px solid var(--powder);
+    background:rgba(239,227,200,.08);color:var(--parchment);font:inherit;font-size:15px;}
+  .search input::placeholder{color:rgba(239,227,200,.55)}
+  .search input:focus{outline:2px solid var(--honey);outline-offset:1px;background:rgba(239,227,200,.14)}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.6}
+  .search .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--parchment);
+    cursor:pointer;font-size:20px;line-height:1;padding:4px 8px;opacity:.6;display:none}
+  .search .clr:hover{opacity:1}
+
+  .hero{background:radial-gradient(120% 90% at 78% 18%, #3a271b 0%, var(--espresso) 55%, #1c110b 100%);
+    color:var(--parchment);padding:54px 0 40px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:38px;align-items:center}
+  .eyebrow{font-family:"IBM Plex Mono";font-size:12.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--honey);margin-bottom:18px}
+  .hero h1{font-size:clamp(38px,6vw,66px);color:var(--parchment)}
+  .hero h1 em{font-style:normal;color:var(--honey-hi)}
+  .hero p.lede{font-size:18.5px;color:rgba(239,227,200,.82);max-width:34ch;margin:20px 0 26px}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:10px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-weight:600;font-size:15px;cursor:pointer;border:1px solid transparent}
+  .btn-primary{background:var(--lacquer);color:#fff}
+  .btn-primary:hover{background:var(--lacquer-dk);text-decoration:none}
+  .btn-ghost{background:transparent;color:var(--parchment);border-color:var(--powder)}
+  .btn-ghost:hover{background:var(--powder-2);text-decoration:none}
+
+  .board-stage{position:relative;filter:drop-shadow(0 26px 44px rgba(0,0,0,.5))}
+  .board-svg{width:100%;height:auto;display:block}
+  .coin-enter{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.4)}
+  .board-cap{margin-top:16px;min-height:44px;font-size:14.5px;color:rgba(239,227,200,.85);
+    border-left:2px solid var(--honey);padding-left:12px;transition:opacity .2s}
+  .board-cap b{color:var(--honey-hi);font-family:"IBM Plex Mono";font-weight:600}
+  .hint{font-size:12.5px;color:rgba(239,227,200,.55);margin-top:10px;letter-spacing:.02em}
+  .hot circle.ring{fill:rgba(178,58,43,0);stroke:var(--honey-hi);stroke-width:1.4;transition:fill .18s,stroke .18s;cursor:pointer}
+  .hot text{font-family:"IBM Plex Mono";font-size:13px;font-weight:600;fill:var(--espresso);pointer-events:none}
+  .hot:hover circle.ring,.hot.active circle.ring{fill:var(--honey-hi)}
+  .hot:focus{outline:none}
+  .hot:focus circle.ring{fill:var(--honey-hi);stroke:#fff}
+
+  .chips-band{position:sticky;top:57px;z-index:40;background:var(--parchment);border-bottom:1px solid rgba(110,58,40,.16);padding:12px 0}
+  .chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{white-space:nowrap;padding:7px 15px;border-radius:999px;border:1px solid rgba(110,58,40,.28);
+    background:transparent;color:var(--rosewood);font:inherit;font-size:14px;font-weight:500;cursor:pointer}
+  .chip:hover{background:rgba(110,58,40,.08)}
+  .chip.on{background:var(--rosewood);color:var(--parchment);border-color:var(--rosewood)}
+
+  main{padding:8px 0 20px}
+  .sec{padding:40px 0 8px;scroll-margin-top:120px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+  .sec-num{font-family:"IBM Plex Mono";font-size:14px;color:var(--lacquer);font-weight:600}
+  .sec h2{font-size:clamp(26px,3.5vw,34px);color:var(--rosewood)}
+  .sec-desc{color:var(--ink-soft);max-width:62ch;margin:8px 0 22px;font-size:16px}
+
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .card{background:var(--card);border:1px solid rgba(110,58,40,.14);border-radius:16px;padding:20px 22px 18px;box-shadow:var(--shadow);position:relative}
+  .card .art{font-family:"IBM Plex Mono";font-size:12px;font-weight:600;color:var(--lacquer);letter-spacing:.04em;
+    display:inline-block;margin-bottom:9px;border:1px solid rgba(178,58,43,.25);padding:2px 8px;border-radius:6px}
+  .card h3{font-size:19px;color:var(--ink);margin-bottom:7px;letter-spacing:-.005em;font-weight:700}
+  .card p{margin:0;font-size:15.5px;color:var(--ink-soft);line-height:1.58}
+  .card mark{background:var(--honey);color:var(--ink);border-radius:3px;padding:0 2px}
+  .card.step{background:linear-gradient(180deg,#fffdf7,#fbf5e8);border-color:rgba(178,58,43,.2)}
+  .card.step .art{background:var(--lacquer);color:#fff;border-color:var(--lacquer)}
+  .card.wide{grid-column:1/-1}
+
+  .no-results{display:none;text-align:center;padding:60px 20px;color:var(--ink-soft)}
+  .no-results b{font-family:"Bricolage Grotesque";font-size:22px;color:var(--rosewood);display:block;margin-bottom:6px}
+
+  .diagram{grid-column:1/-1;display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:center;
+    background:var(--espresso-2);border-radius:16px;padding:22px 24px;color:var(--parchment);border:1px solid var(--powder)}
+  .diagram svg{width:100%;height:auto;filter:drop-shadow(0 10px 20px rgba(0,0,0,.35))}
+  .diagram h3{color:var(--honey-hi);font-size:19px;margin-bottom:6px}
+  .diagram p{color:rgba(239,227,200,.8);font-size:15px;margin:0}
+
+  footer{background:var(--espresso);color:rgba(239,227,200,.7);padding:40px 0 46px;font-size:13.5px;line-height:1.7}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:flex-start}
+  footer b{color:var(--honey-hi);font-family:"Bricolage Grotesque";font-size:16px;display:block;margin-bottom:8px}
+  footer .note{max-width:52ch}
+
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr;gap:30px}
+    .board-stage{max-width:400px;margin:0 auto}
+    .cards{grid-template-columns:1fr}
+    .diagram{grid-template-columns:1fr}
+    .diagram svg{max-width:200px}
+    .search{flex-basis:180px}
+    .brand span{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto!important}
+    .coin-enter{opacity:1!important;transform:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-inner">
+    <div class="brand">
+      <svg class="monogram" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="19" fill="none" stroke="#e7c079" stroke-width="1.5"/>
+        <circle cx="20" cy="20" r="8.5" fill="#b23a2b"/>
+        <circle cx="20" cy="20" r="8.5" fill="none" stroke="#f2d89a" stroke-width="1"/>
+        <g fill="#f2d89a"><circle cx="20" cy="6.5" r="2.4"/><circle cx="33.5" cy="20" r="2.4"/><circle cx="20" cy="33.5" r="2.4"/><circle cx="6.5" cy="20" r="2.4"/></g>
+      </svg>
+      <div><b>World Carrom Federation</b><span>Official Laws · Modern Edition</span></div>
+    </div>
+    <div class="search" role="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#efe3c8" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search any rule — “queen”, “striker”, “foul”…" autocomplete="off" aria-label="Search the laws"/>
+      <button class="clr" id="clr" aria-label="Clear search">×</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">The Laws of Carrom</div>
+      <h1>Carrom,<br><em>fully explained.</em></h1>
+      <p class="lede">Every rule of the board — from the first flick at home to the tie-breaker at a world final — in plain language anyone can follow.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#sec-quickstart">Learn to play in 5 steps</a>
+        <a class="btn btn-ghost" href="#sec-queen">The Queen, made simple →</a>
+      </div>
+    </div>
+    <div class="board-stage">
+      <svg class="board-svg" viewBox="0 0 400 400" role="img" aria-label="A carrom board with coins arranged for the break. Tap the numbered points to learn each part.">
+        <defs>
+          <radialGradient id="surface" cx="50%" cy="42%" r="70%">
+            <stop offset="0%" stop-color="#f2d89a"/><stop offset="55%" stop-color="#e7c079"/><stop offset="100%" stop-color="#d3a659"/>
+          </radialGradient>
+          <linearGradient id="frameg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7d4430"/><stop offset="50%" stop-color="#5c3021"/><stop offset="100%" stop-color="#42211611"/>
+          </linearGradient>
+          <radialGradient id="pocket" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#140b07"/><stop offset="100%" stop-color="#3a2417"/>
+          </radialGradient>
+        </defs>
+        <rect x="2" y="2" width="396" height="396" rx="10" fill="url(#frameg)"/>
+        <rect x="2" y="2" width="396" height="396" rx="10" fill="none" stroke="#3a2416" stroke-width="2"/>
+        <rect x="30" y="30" width="340" height="340" rx="4" fill="url(#surface)"/>
+        <circle cx="46" cy="46" r="15" fill="url(#pocket)"/><circle cx="354" cy="46" r="15" fill="url(#pocket)"/>
+        <circle cx="46" cy="354" r="15" fill="url(#pocket)"/><circle cx="354" cy="354" r="15" fill="url(#pocket)"/>
+        <g stroke="#2a1e16" stroke-width="2" opacity=".55" fill="none">
+          <path d="M70 70 L150 150"/><path d="M330 70 L250 150"/><path d="M70 330 L150 250"/><path d="M330 330 L250 250"/>
+        </g>
+        <g stroke="#2a1e16" stroke-width="2.4" opacity=".8">
+          <line x1="96" y1="66" x2="304" y2="66"/><line x1="96" y1="334" x2="304" y2="334"/>
+          <line x1="66" y1="96" x2="66" y2="304"/><line x1="334" y1="96" x2="334" y2="304"/>
+        </g>
+        <g fill="#b23a2b" stroke="#2a1e16" stroke-width="1">
+          <circle cx="96" cy="66" r="6"/><circle cx="304" cy="66" r="6"/><circle cx="96" cy="334" r="6"/><circle cx="304" cy="334" r="6"/>
+          <circle cx="66" cy="96" r="6"/><circle cx="66" cy="304" r="6"/><circle cx="334" cy="96" r="6"/><circle cx="334" cy="304" r="6"/>
+        </g>
+        <circle cx="200" cy="200" r="80" fill="none" stroke="#2a1e16" stroke-width="1.4" opacity=".5"/>
+        <circle cx="200" cy="200" r="12" fill="none" stroke="#b23a2b" stroke-width="2"/>
+        <g id="coins"></g>
+        <g id="hotspots"></g>
+      </svg>
+      <div class="board-cap" id="cap"><b>Tap a marker</b> to explore the parts of the board.</div>
+      <div class="hint">A tournament board is 74 cm square, backed by four netted corner pockets.</div>
+    </div>
+  </div>
+</section>
+
+<nav class="chips-band" aria-label="Jump to section">
+  <div class="wrap chips" id="chips"></div>
+</nav>
+
+<main class="wrap" id="content"></main>
+
+<div class="no-results" id="noResults">
+  <b>No rule matches that.</b>
+  Try a simpler word like “queen”, “powder”, “toss”, or “doubles” — or clear the search to see everything.
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="note">
+      <b>World Carrom Federation</b>
+      A modern, plain-language edition of the laws of carrom — rewritten for clarity across every generation of player, with original illustrations. The sport's competitive laws are maintained by the International Carrom Federation (2026 edition); this edition restates the rules of play in fresh wording.
+    </div>
+    <div class="note" style="max-width:34ch">
+      <b>Play well, play fair</b>
+      When in doubt on the board, the umpire's call stands. For the full formal text and any official amendment, always check with your national federation.
+    </div>
+  </div>
+</footer>
+
+<script>
+const SECTIONS = [
+  {key:"quickstart", num:"01", label:"Start here",     title:"Start here",               desc:"The whole game in five moves. If you read only one section, read this one."},
+  {key:"equipment",  num:"02", label:"The board",      title:"The board & equipment",    desc:"What a proper board, coins, and striker are made of — and the sizes that make a board tournament-legal."},
+  {key:"break",      num:"03", label:"Setup & break",  title:"Setting up & the break",   desc:"How the 19 coins are packed, who breaks, and what counts as a clean opening stroke."},
+  {key:"play",       num:"04", label:"Playing",        title:"Playing: turns & scoring", desc:"Striking cleanly, keeping your turn, and how points, games, and matches are counted."},
+  {key:"queen",      num:"05", label:"The Queen",      title:"The Queen",                desc:"The red coin — worth three points, but only if you earn her and cover her in time. Carrom's trickiest rule, made simple."},
+  {key:"fouls",      num:"06", label:"Fouls & dues",   title:"Fouls, dues & placing",    desc:"What goes wrong, what it costs you, and exactly how penalty coins are taken out and replaced."},
+  {key:"overboard",  num:"07", label:"Off the board",  title:"Off the board & resting",  desc:"Coins that jump, bounce, stand on edge, or teeter at a pocket's mouth."},
+  {key:"tournament", num:"08", label:"Tournament",     title:"Tournament play & conduct",desc:"The toss, changing sides, protests, and the conduct expected at a serious match."},
+  {key:"glossary",   num:"09", label:"Glossary",       title:"The language of the laws", desc:"The handful of special words the laws use — decoded."}
+];
+
+const RULES = [
+  // QUICK START
+  {sec:"quickstart", art:"Step 1", title:"The goal", body:"Carrom is finger billiards. You flick a striker to pocket your nine coins into the four corner pockets before your opponent pockets theirs. One player takes white, the other black — and the single red coin is the Queen.", tags:"aim objective goal win pocket coins striker beginner"},
+  {sec:"quickstart", art:"Step 2", title:"Set up the board", body:"Pack all 19 coins into a tight circle inside the outer ring, with the Queen in the exact centre and black and white coins alternating around her. Dust the surface with a little powder so the pieces glide.", tags:"setup arrange pack circle centre powder glide begin"},
+  {sec:"quickstart", art:"Step 3", title:"Take your shot", body:"Sit on one side, place the striker anywhere along your two base lines, and flick it with one finger. Pocket one of your own coins and you keep shooting; miss, and it becomes your opponent's turn.", tags:"strike flick finger base line turn shoot"},
+  {sec:"quickstart", art:"Step 4", title:"Win the board", body:"The first player to sink all nine of their coins wins the board, and scores one point for every coin the opponent still has left on the surface.", tags:"win board score points opponent coins left"},
+  {sec:"quickstart", art:"Step 5", title:"The Queen bonus", body:"Sink the red Queen and immediately “cover” her by pocketing one of your own coins. Do it before you win the board and you earn 3 bonus points. First to 25 points (or the best of 8 boards) wins the game; matches are the best of three.", tags:"queen cover bonus three points game match best of three 25"},
+
+  // EQUIPMENT
+  {sec:"equipment", art:"Board", title:"The playing surface", body:"Plywood or an equally smooth wood, at least 8 mm thick, cut into a square between 73.5 and 74 cm, with a perfectly smooth top. Quick quality test: a 15 g striker hit hard from a base line should run at least three and a half lengths of the board.", tags:"board surface plywood thick 74cm square smooth run test size dimensions"},
+  {sec:"equipment", art:"Board", title:"Frame & pockets", body:"A hardwood frame (rosewood or similar) with curved inner corners, 1.9–2.54 cm tall and 6.35–7.6 cm wide, braced underneath so the board stays flat. Its four corner pockets are rounded inward, 4.45 cm across, each backed by a net able to hold at least ten coins.", tags:"frame rosewood hardwood corners pockets round 4.45 net ten rebound"},
+  {sec:"equipment", art:"Board", title:"Lines, arrows & circles", body:"Two parallel base lines (each 47 cm) run along all four sides, the outer line 10.15 cm from the frame, closed by red base circles. Diagonal arrows point into each pocket (no longer than 26.7 cm). A red centre circle marks the middle; a 17 cm outer circle rings the starting pile.", tags:"base line 47 arrows diagonal centre circle outer circle 17 red markings"},
+  {sec:"equipment", art:"Coins", title:"The coins (carrommen)", body:"Nine white, nine black, and one red Queen — smooth wooden discs 3.02–3.18 cm across, 0.7–0.9 cm thick, and 5.25–5.5 g each, all uniform so they behave the same way.", tags:"coins carrommen carromman nine white black red queen weight size wood uniform"},
+  {sec:"equipment", art:"Striker", title:"The striker", body:"A smooth, round disc no wider than 4.13 cm and no heavier than 15 g. Any material except ivory or metal is allowed; engraved designs are fine, but visible fixed metal is not. Each player's striker is certified by the umpire before play.", tags:"striker 15g 4.13 disc material ivory metal engraved weight certified"},
+  {sec:"equipment", art:"Setup", title:"Stand, seat & light", body:"The board rests on a firm stand 63–70 cm high; players use an armless stool or chair 40–50 cm high. A shaded 60–100 W lamp lights only the board and can be raised or lowered so it never shines in a player's eyes.", tags:"stand table height stool chair armless light lamp watts seat"},
+  {sec:"equipment", art:"Setup", title:"Powder", body:"Good-quality, dry powder spread evenly keeps the surface fast and true. Spread it before the break — never too much, never too little.", tags:"powder boric dry smooth surface fast even before break"},
+
+  // BREAK
+  {sec:"break", art:"Rule 41", title:"The arrangement", body:"Before play, pack all 19 coins flat inside the outer circle: the Queen in the centre, the rest ringed tightly around her with black and white alternating, and three white coins forming a small “Y” pointing toward the breaker. Every coin must touch its neighbours.", tags:"arrangement setup Y shape queen centre alternate pack outer circle touch break formation"},
+  {sec:"break", art:"Rule 42", title:"Who breaks, and colours", body:"The player who chose to strike first takes the break and plays white for that board; the opponent plays black. The Queen is the common coin, earned by whoever covers her legally.", tags:"break first white black colour choose strike queen common"},
+  {sec:"break", art:"Rule 44", title:"What counts as a break", body:"The break has been made the instant the striker touches any coin — even the lightest graze counts.", tags:"break made touch graze striker any coin"},
+  {sec:"break", art:"Rule 45", title:"Missing on the break", body:"If the striker misses every coin, you get up to two more attempts. Fail all of them and both the break and the turn pass to your opponent, who plays black — with the pile left exactly as arranged, and no due charged.", tags:"miss break two chances fail pass opponent black no rearrange due"},
+  {sec:"break", art:"Rule 46", title:"Timing the break", body:"Break only after the umpire calls “Play,” and within 15 seconds of that call. Break too early and any coins you pocket are removed, a foul is declared, and you lose the turn.", tags:"timing play umpire 15 seconds early foul lose turn"},
+  {sec:"break", art:"Rule 49", title:"Who breaks each game", body:"The turn to break alternates through the first game. In the second game the player who didn't break first now goes first; in a deciding third game, the original first-breaker opens again.", tags:"break order alternate first second third game turn who opens"},
+
+  // PLAY
+  {sec:"play", art:"Rule 33", title:"Flick — don't push", body:"The striker must be struck cleanly with a finger. A shove or a jerk of the elbow (a “push”) is a foul. You may use either hand, and your hand may rest flat on the surface as you play.", tags:"flick push shove elbow foul finger either hand strike thumb"},
+  {sec:"play", art:"Rule 37", title:"Stay behind the line", body:"Your elbow may not come over the playing surface or reach past the arrow lines, though your hand may cross them. Leaning on the stand, board, or table for support is not allowed.", tags:"elbow arrow imaginary line hand cross support lean posture reach"},
+  {sec:"play", art:"Rule 130", title:"Placing the striker", body:"When you shoot, the striker must touch both base lines. If you play from a base circle instead, cover the circle completely but don't touch the arrow.", tags:"placing striker both base lines base circle arrow touch position"},
+  {sec:"play", art:"Rule 48", title:"Keeping your turn", body:"As long as you keep pocketing your own coins (or the Queen legally), you keep shooting. The moment a stroke pockets nothing of yours, the turn passes to your opponent.", tags:"turn continue keep pocket own coins pass opponent"},
+  {sec:"play", art:"Rule 50", title:"The 15-second clock", body:"You have 15 seconds for each stroke, counted from the moment the coins settle and the striker is picked up and out of the way.", tags:"time 15 seconds clock stroke settle pace"},
+  {sec:"play", art:"Rule 51", title:"Playing out of turn", body:"Strike out of turn and, if the umpire catches it, you lose the board by the coins and Queen then on the surface. If nobody notices before the next stroke, the play stands and turns simply carry on.", tags:"out of turn wrong lose board unnoticed continue"},
+  {sec:"play", art:"Rule 52", title:"Winning the board", body:"The first player to pocket all nine of their own coins wins that board.", tags:"win board first all nine coins finish"},
+  {sec:"play", art:"Rule 53", title:"How points are counted", body:"The winner of a board scores one point for each of the opponent's coins still on the surface at the finish. The Queen's value counts only for the player who wins the board.", tags:"points count score one per coin opponent remaining queen winner"},
+  {sec:"play", art:"Rule 55", title:"The 12-point ceiling", body:"A single board is worth at most 12 points; any outstanding penalty coins are simply written off at the finish.", tags:"maximum 12 points ceiling board penalty written off"},
+  {sec:"play", art:"Rule 56", title:"Games & matches", body:"A game is 25 points or eight boards, whichever comes first. Every match is decided by the best of three games. If a game is level after eight boards, one extra board settles it — with a toss for the break only.", tags:"game 25 points eight boards match best of three tie extra board"},
+  {sec:"play", art:"Rule 58", title:"Changing sides", body:"Players swap sides at the end of each game. From the quarter-finals onward, sides also change once anyone reaches 13 points within a board.", tags:"change sides swap game quarter final 13 points doubles"},
+  {sec:"play", art:"Rule 116", title:"When the striker jumps off", body:"If the striker leaps off the board during a stroke, your turn still continues — as long as that same stroke pocketed one of your own coins or the Queen.", tags:"striker jumps over board off turn continues pocket"},
+
+  // QUEEN
+  {sec:"queen", art:"Rule 92", title:"Earning the Queen", body:"You may keep the Queen only after you've already pocketed one of your own coins. Sink her, then “cover” her by pocketing another of your coins on the same or the very next stroke.", tags:"queen earn cover own coin first same next stroke red"},
+  {sec:"queen", art:"Rule 95", title:"Taking her too early", body:"Pocket the Queen before any of your own coins are down — or while a due is outstanding against you — and she is returned to the centre, and your turn ends.", tags:"queen early before own coin due returned lose turn centre"},
+  {sec:"queen", art:"Rule 96", title:"Cover her or lose her", body:"A Queen that isn't covered goes back to the centre. But if neither the umpire nor the opponent notices before the next stroke, she counts as properly covered.", tags:"queen cover lose returned unnoticed next stroke counts covered"},
+  {sec:"queen", art:"Rule 97", title:"Queen and a coin together", body:"Sink the Queen and one of your own coins in the same shot and she's covered at once. (One exception: on the break, when all nine of your coins are still down, a single coin with her isn't enough — you still owe the cover.)", tags:"queen coin together same stroke covered break nine coins exception"},
+  {sec:"queen", art:"Rule 93", title:"Where she's replaced", body:"The umpire always returns the Queen to the centre circle. If the centre is covered, she's placed touching it, where she's hardest to pocket — and that placement is final.", tags:"queen replace centre circle umpire covered adjacent hardest final"},
+  {sec:"queen", art:"Rule 99", title:"Queen with the striker", body:"If the Queen and the striker drop together, the umpire replaces the Queen and you owe a penalty coin. Whether you keep your turn depends on whether the stroke was clean (proper) or a foul (improper).", tags:"queen striker together penalty due proper improper turn"},
+  {sec:"queen", art:"Rule 54", title:"The 22-point cut-off", body:"The Queen's 3-point bonus counts only up to and including a score of 21. Once you're on 22 or more, covering her adds nothing to your total.", tags:"queen bonus 21 22 points cut off no advantage score"},
+  {sec:"queen", art:"Rules 102–112", title:"The Queen in the endgame", body:"Sink your last coin, your opponent's last coin, and the Queen all at once and the result swings on two things: whether the stroke was proper or improper, and whether you're under 22 points (full 3-point swing) or at 22-plus (a single point). A foul stroke hands the swing — and often an extra point on demand — to your opponent.", tags:"endgame last coin queen proper improper 22 points additional point demand win lose"},
+  {sec:"queen", art:"Rule 114", title:"No shortcuts with penalty coins", body:"You may not use a due or penalty coin to line up a shot at the Queen. Do it and the umpire has you rectify, with a foul.", tags:"queen due penalty coin shot rectify foul shortcut"},
+
+  // FOULS
+  {sec:"fouls", art:"Rule 62", title:"Two kinds of foul", body:"Anything against the laws is either a Technical Foul — committed before your turn's first stroke, or by the player not on strike — or a Foul, committed during or after your first stroke.", tags:"foul technical two kinds definition before after first stroke"},
+  {sec:"fouls", art:"Rule 63", title:"Technical foul", body:"A technical foul costs you one coin — taken out for your opponent to place — but your turn continues.", tags:"technical foul one coin placed opponent turn continues penalty"},
+  {sec:"fouls", art:"Rule 64", title:"Foul", body:"A foul costs you one coin and your turn. If the same stroke also pocketed coins, those are taken out too, along with one extra.", tags:"foul one coin lose turn pocketed extra penalty"},
+  {sec:"fouls", art:"Rule 72", title:"Sinking the striker", body:"Pot the striker on its own and you lose the turn and owe a “due” — one of your coins is removed for placing. Do it on a foul stroke and you owe two coins (a due and a penalty).", tags:"striker pocket alone due penalty proper improper two coins lose turn"},
+  {sec:"fouls", art:"Rule 76", title:"Pocketing by a foul", body:"A coin sunk with an illegal stroke still counts as pocketed — but you lose the turn, and a penalty coin is taken out for your opponent to place.", tags:"foul pocket counts penalty coin lose turn improper"},
+  {sec:"fouls", art:"Rule 78", title:"Placing penalty coins", body:"Removed coins (“dues”) are placed flat inside the outer circle by the opponent, as soon as they become available — never covering the centre circle.", tags:"placing due penalty outer circle opponent centre available flat"},
+  {sec:"fouls", art:"Rule 84", title:"What “placed” means", body:"A coin is placed the moment your finger lifts off it and it's resting inside the outer circle. You may not hold any other coin or the striker while placing, and you must not disturb any coin already on the board.", tags:"placed finger lift outer circle hold coin striker disturb rule"},
+  {sec:"fouls", art:"Rule 87", title:"You may decline a due", body:"You can forego your penalty coins entirely — all of them, not just some — as long as you tell the umpire within 15 seconds.", tags:"forego decline due penalty total whole umpire 15 seconds"},
+  {sec:"fouls", art:"Rule 134", title:"Hands off the coins", body:"Once the break is done, coins may only be moved by a stroke. Nudge one by accident and the umpire restores it — with a foul against you.", tags:"touch move coins accident umpire restore foul disturb hands off"},
+  {sec:"fouls", art:"Rule 122", title:"Powder conduct", body:"Spread powder before the break only. Once the umpire calls “Play,” you may not add powder, wipe it, or blow it off the surface — though you may clear excess along your own base lines with the striker.", tags:"powder before play wipe blow remove foul conduct base line"},
+  {sec:"fouls", art:"Rule 133", title:"Empty hands", body:"During your turn you may hold nothing solid in either hand except the striker itself.", tags:"hold object hand striker only turn solid material"},
+
+  // OVERBOARD
+  {sec:"overboard", art:"Rule 65", title:"Coins that jump off", body:"A coin or Queen that flies off the board is replaced by the umpire in the centre circle. When several jump at once, the umpire has a set order for restacking them around the centre.", tags:"jump off board overboard replace centre circle umpire order"},
+  {sec:"overboard", art:"Rule 66", title:"Bounced back on", body:"A coin that leaps up and lands back on the surface is still placed in the centre — unless it first strikes the lamp or shade, in which case it's treated as a normal, natural run and left where it lies.", tags:"bounce back centre lamp shade natural run overboard"},
+  {sec:"overboard", art:"Rules 67–68", title:"On edge or overlapping", body:"A coin or Queen resting on its rim is left exactly as it stands, and two pieces that come to rest overlapping are left undisturbed.", tags:"edge rim standing overlap left undisturbed"},
+  {sec:"overboard", art:"Rules 69–70", title:"Striker resting on a coin", body:"The umpire carefully lifts the striker off (or lifts a coin off the striker) without disturbing anything. If a coin at a pocket's mouth loses its balance during that lift and drops, it counts as pocketed.", tags:"striker rests on coin umpire remove pocket mouth falls counts gravity"},
+  {sec:"overboard", art:"Rule 71", title:"The slow drop", body:"A coin balanced at a pocket's edge that eventually falls in — for any reason at all — counts as properly pocketed.", tags:"perilous edge slow drop falls pocket counts properly"},
+
+  // TOURNAMENT
+  {sec:"tournament", art:"Rule 39", title:"The toss", body:"At the start of each match the umpire tosses a coin (or has a player call a piece). The winner chooses either the side or the break — but not both.", tags:"toss coin call side break choice winner match start"},
+  {sec:"tournament", art:"Rule 40", title:"Trial boards", body:"Each player or pair gets exactly two practice boards after the toss, before the match proper begins.", tags:"trial board practice two after toss warm up"},
+  {sec:"tournament", art:"Rule 30", title:"Keep still", body:"During a board, only your playing arm may touch the board or stand. Rings, a watch, or loose clothing must not brush the playing surface.", tags:"body still playing arm touch ring watch clothing surface"},
+  {sec:"tournament", art:"Rules 129–132", title:"No distractions", body:"Don't distract your opponent, don't chat with spectators without the umpire's leave, and in doubles never talk to or signal your partner during a board.", tags:"distraction spectators talk doubles partner signal gesture conduct"},
+  {sec:"tournament", art:"Rule 121", title:"Appeals stop the clock", body:"Raise a point with the umpire and the clock stops. Play only resumes when the umpire calls “Play” again; carrying on before that call can cost you the whole board.", tags:"appeal umpire clock stops play resume dispute lose board"},
+  {sec:"tournament", art:"Rules 137–142", title:"When a board is replayed", body:"A board is cancelled and replayed if both players pass three times running, if there's genuinely no room to place the striker, or on any freak event beyond the umpire's control.", tags:"replay cancelled pass three times no space striker unforeseen board"},
+  {sec:"tournament", art:"Rule 143", title:"Losing the whole match", body:"A player forfeits the entire match for serious misconduct — leaving the playing area without permission, defying or insulting the umpire, playing under the influence, using an uncertified striker, or failing to appear within 15 minutes.", tags:"loss entire match misconduct leave area insult umpire drunk uncertified striker forfeit discipline"},
+  {sec:"tournament", art:"Protest", title:"Protests", body:"Protests go in writing, in English, to the tournament secretary through the umpire, within 15 minutes of the board, with the scrutiny fee. Upheld, the board is replayed and the fee refunded; overruled, the result stands and the fee is kept.", tags:"protest written english secretary umpire 15 minutes fee replay refund overrule"},
+  {sec:"tournament", art:"Rules 138–139", title:"Intervals & conceding", body:"There's a 10-minute interval between the second and third games, and a player is free to concede a game, or the whole match, at any stage.", tags:"interval break 10 minutes second third game rest concede give up forfeit"},
+
+  // GLOSSARY
+  {sec:"glossary", art:"Term", title:"Board", body:"One complete round of play — from the umpire's call of “Play” until the last coin is pocketed.", tags:"board definition round play finish glossary"},
+  {sec:"glossary", art:"Term", title:"Break", body:"The very first stroke of a board.", tags:"break first stroke definition glossary"},
+  {sec:"glossary", art:"Term", title:"Cover", body:"Pocketing one of your own coins on the same or next stroke after sinking the Queen, so that she counts for you.", tags:"cover queen own coin next stroke glossary"},
+  {sec:"glossary", art:"Term", title:"Due", body:"What you owe after pocketing the striker: one of your coins is taken out for your opponent to place.", tags:"due penalty striker coin placed glossary"},
+  {sec:"glossary", art:"Term", title:"Cannon & pair", body:"Two coins (or a coin and the Queen) lined up toward a pocket. Touching each other, it's a “cannon”; with a gap between them, it's a “pair.” Together they're called a “shot.”", tags:"cannon pair shot two coins pocket touching gap glossary"},
+  {sec:"glossary", art:"Term", title:"Push", body:"An illegal jerk of the elbow instead of a clean finger-flick.", tags:"push jerk elbow illegal foul flick glossary"},
+  {sec:"glossary", art:"Term", title:"Thumbing", body:"Playing the striker with the thumb — permitted under the laws.", tags:"thumb thumbing stroke allowed glossary"},
+  {sec:"glossary", art:"Term", title:"Proper & improper", body:"A “proper” stroke follows the laws; an “improper” one breaks them. Almost every penalty in the game turns on which of the two you played.", tags:"proper improper stroke legal illegal glossary"},
+  {sec:"glossary", art:"Term", title:"White & Black Slam", body:"Clearing all of one colour — and, for white, the Queen too — in a single unbroken first turn. Also called “break to finish,” it's carrom's version of a perfect break.", tags:"white slam black slam break to finish perfect first turn glossary"}
+];
+
+const DIAGRAMS = {
+  break:{
+    title:"The break arrangement",
+    text:"Queen dead centre, coins packed tight and alternating around her, three whites forming a small “Y” aimed at the breaker.",
+    svg:`<svg viewBox="0 0 200 200" role="img" aria-label="Break arrangement of coins">
+      <circle cx="100" cy="100" r="72" fill="none" stroke="#e7c079" stroke-width="1.2" opacity=".5"/>
+      <g id="d1"></g></svg>`
+  },
+  play:{
+    title:"Placing the striker",
+    text:"The striker must touch both base lines. Playing from a base circle instead? Cover it fully — but never touch the arrow.",
+    svg:`<svg viewBox="0 0 200 120" role="img" aria-label="Striker on the base lines">
+      <line x1="24" y1="46" x2="176" y2="46" stroke="#efe3c8" stroke-width="3"/>
+      <line x1="24" y1="74" x2="176" y2="74" stroke="#efe3c8" stroke-width="2"/>
+      <circle cx="24" cy="60" r="9" fill="#b23a2b"/><circle cx="176" cy="60" r="9" fill="#b23a2b"/>
+      <circle cx="100" cy="60" r="15" fill="#f2d89a" stroke="#8f2d21" stroke-width="2.5"/>
+      <circle cx="100" cy="60" r="6" fill="none" stroke="#8f2d21" stroke-width="1.5"/>
+    </svg>`
+  },
+  queen:{
+    title:"Sink her, then cover her",
+    text:"Pocket the red Queen, then pocket one of your own coins on the same or next stroke to keep her — and her 3 points.",
+    svg:`<svg viewBox="0 0 200 120" role="img" aria-label="Queen and a coin heading to a pocket">
+      <defs><marker id="ar" markerWidth="7" markerHeight="7" refX="4" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#e7c079"/></marker>
+      <radialGradient id="pk" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#140b07"/><stop offset="100%" stop-color="#3a2417"/></radialGradient></defs>
+      <circle cx="34" cy="34" r="17" fill="url(#pk)"/>
+      <path d="M60 52 L44 40" stroke="#e7c079" stroke-width="2.5" fill="none" marker-end="url(#ar)"/>
+      <circle cx="86" cy="70" r="16" fill="#b23a2b" stroke="#f2d89a" stroke-width="1.5"/>
+      <circle cx="86" cy="70" r="7" fill="none" stroke="#f2d89a" stroke-width="1"/>
+      <text x="86" y="74" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#f2d89a" font-weight="600">3</text>
+      <circle cx="130" cy="86" r="15" fill="#f6ecd6" stroke="#c9b184" stroke-width="1.5"/>
+      <circle cx="130" cy="86" r="7" fill="none" stroke="#d8c39a" stroke-width="1"/>
+      <text x="150" y="42" font-family="IBM Plex Sans" font-size="12" fill="#efe3c8" opacity=".8">Queen</text>
+      <text x="150" y="112" font-family="IBM Plex Sans" font-size="12" fill="#efe3c8" opacity=".8">+ cover</text>
+    </svg>`
+  }
+};
+
+const content=document.getElementById('content');
+const chipsEl=document.getElementById('chips');
+const noResults=document.getElementById('noResults');
+const qInput=document.getElementById('q');
+const clrBtn=document.getElementById('clr');
+let activeSection="all";
+
+const allChip=mk('button','chip on','All rules'); allChip.dataset.sec="all"; chipsEl.appendChild(allChip);
+SECTIONS.forEach(s=>{const c=mk('button','chip',s.label); c.dataset.sec=s.key; chipsEl.appendChild(c);});
+chipsEl.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  activeSection=c.dataset.sec;
+  [...chipsEl.children].forEach(x=>x.classList.toggle('on',x===c));
+  render();
+  if(activeSection!=="all"){const a=document.getElementById('sec-'+activeSection); if(a)a.scrollIntoView({block:'start'});}
+  else{window.scrollTo({top:document.querySelector('.chips-band').offsetTop});}
+});
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function hl(text,q){const e=esc(text); if(!q)return e;
+  const rx=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+  return e.replace(rx,'<mark>$1</mark>');}
+
+function render(){
+  const q=qInput.value.trim().toLowerCase();
+  clrBtn.style.display=q?'block':'none';
+  content.innerHTML=''; let total=0;
+  SECTIONS.forEach(sec=>{
+    if(activeSection!=="all"&&activeSection!==sec.key)return;
+    const matches=RULES.filter(r=>{
+      if(r.sec!==sec.key)return false;
+      if(!q)return true;
+      return (r.title+' '+r.body+' '+r.tags+' '+r.art).toLowerCase().includes(q);
+    });
+    if(!matches.length)return;
+    total+=matches.length;
+    const secEl=mk('section','sec'); secEl.id='sec-'+sec.key;
+    const head=mk('div','sec-head');
+    head.innerHTML=`<span class="sec-num">${sec.num}</span><h2>${sec.title}</h2>`;
+    secEl.appendChild(head);
+    secEl.appendChild(mk('p','sec-desc',sec.desc));
+    const grid=mk('div','cards');
+    matches.forEach(r=>{
+      const card=mk('article',sec.key==='quickstart'?'card step':'card');
+      card.innerHTML=`<span class="art">${esc(r.art)}</span><h3>${hl(r.title,q)}</h3><p>${hl(r.body,q)}</p>`;
+      grid.appendChild(card);
+    });
+    if(DIAGRAMS[sec.key]&&!q){
+      const d=DIAGRAMS[sec.key];
+      const dia=mk('div','diagram wide');
+      dia.innerHTML=`<div>${d.svg}</div><div><h3>${d.title}</h3><p>${d.text}</p></div>`;
+      grid.appendChild(dia);
+    }
+    secEl.appendChild(grid);
+    content.appendChild(secEl);
+  });
+  noResults.style.display=total?'none':'block';
+  drawBreakDiagram();
+}
+
+function mk(tag,cls,txt){const e=document.createElement(tag); if(cls)e.className=cls; if(txt!=null)e.textContent=txt; return e;}
+
+function coinNode(cx,cy,r,type){
+  const ns='http://www.w3.org/2000/svg';
+  const g=document.createElementNS(ns,'g');
+  const c=document.createElementNS(ns,'circle');
+  c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);
+  const fill=type==='q'?'#b23a2b':(type==='w'?'#f6ecd6':'#241812');
+  c.setAttribute('fill',fill);
+  c.setAttribute('stroke',type==='w'?'#c9b184':(type==='q'?'#f2d89a':'#4a3323'));
+  c.setAttribute('stroke-width','0.9');
+  const ring=document.createElementNS(ns,'circle');
+  ring.setAttribute('cx',cx);ring.setAttribute('cy',cy);ring.setAttribute('r',r*0.5);
+  ring.setAttribute('fill','none');
+  ring.setAttribute('stroke',type==='w'?'#d8c39a':(type==='q'?'#f2d89a':'#5a4130'));
+  ring.setAttribute('stroke-width','0.7');ring.setAttribute('opacity','.8');
+  g.appendChild(c);g.appendChild(ring);return g;
+}
+function pilePositions(scale,cx,cy){
+  const pos=[{x:cx,y:cy,t:'q'}];
+  const r1=8.6*scale,r2=17*scale;
+  for(let i=0;i<6;i++){const a=i*Math.PI/3-Math.PI/2; pos.push({x:cx+r1*Math.cos(a),y:cy+r1*Math.sin(a),t:i%2?'w':'b'});}
+  for(let i=0;i<12;i++){const a=i*Math.PI/6-Math.PI/2; pos.push({x:cx+r2*Math.cos(a),y:cy+r2*Math.sin(a),t:i%2?'b':'w'});}
+  return pos;
+}
+function fillCoins(groupId,scale,cx,cy,radius,animate){
+  const g=document.getElementById(groupId); if(!g)return; g.innerHTML='';
+  pilePositions(scale,cx,cy).forEach((p,i)=>{
+    const node=coinNode(p.x,p.y,radius,p.t);
+    if(animate){node.classList.add('coin-enter'); node.style.animation=`pop .5s cubic-bezier(.2,.9,.3,1.2) ${0.25+i*0.028}s forwards`;}
+    g.appendChild(node);
+  });
+}
+const kf=document.createElement('style');
+kf.textContent='@keyframes pop{to{opacity:1;transform:scale(1)}}';
+document.head.appendChild(kf);
+
+fillCoins('coins',3.0,200,200,7.0,true);
+function drawBreakDiagram(){fillCoins('d1',2.55,100,100,6.0,false);}
+
+const HOTS=[
+  {x:46,y:46,n:1,label:"Corner pocket",d:"4.45 cm across, rounded inward, and netted beneath to hold the coins you sink."},
+  {x:200,y:66,n:2,label:"Base lines",d:"Two parallel lines your striker must touch before every shot. Each is 47 cm long."},
+  {x:110,y:110,n:3,label:"Diagonal arrow",d:"Points into the pocket and marks how far your hand may reach — no crossing it with your elbow."},
+  {x:200,y:200,n:4,label:"The Queen & centre circle",d:"The red coin worth 3 bonus points sits in the centre circle at the start of every board."},
+  {x:200,y:280,n:5,label:"Outer circle",d:"The 17 cm ring that contains the opening pile — and where penalty coins are placed."},
+  {x:354,y:200,n:6,label:"Hardwood frame",d:"Rosewood or similar, curved at the corners, giving the board its true, lively rebound."}
+];
+const hg=document.getElementById('hotspots');
+const cap=document.getElementById('cap');
+const nsuri='http://www.w3.org/2000/svg';
+HOTS.forEach(h=>{
+  const g=document.createElementNS(nsuri,'g');
+  g.setAttribute('class','hot'); g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('aria-label',h.label);
+  const ring=document.createElementNS(nsuri,'circle');
+  ring.setAttribute('class','ring'); ring.setAttribute('cx',h.x); ring.setAttribute('cy',h.y); ring.setAttribute('r',11);
+  const t=document.createElementNS(nsuri,'text');
+  t.setAttribute('x',h.x); t.setAttribute('y',h.y+4.5); t.setAttribute('text-anchor','middle'); t.textContent=h.n;
+  g.appendChild(ring); g.appendChild(t);
+  function activate(){
+    document.querySelectorAll('.hot').forEach(x=>x.classList.remove('active'));
+    g.classList.add('active');
+    cap.innerHTML=`<b>${h.label}.</b> ${h.d}`;
+  }
+  g.addEventListener('click',activate);
+  g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate();}});
+  hg.appendChild(g);
+});
+
+let t;
+qInput.addEventListener('input',()=>{clearTimeout(t);t=setTimeout(render,110);});
+clrBtn.addEventListener('click',()=>{qInput.value='';qInput.focus();render();});
+qInput.addEventListener('keydown',e=>{if(e.key==='Escape'){qInput.value='';render();}});
+
+render();
+</script>
+</body>
+</html>

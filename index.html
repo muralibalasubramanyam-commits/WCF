@@ -56,6 +56,18 @@
   .util a:hover{color:var(--brass-lt)}
   .util-links{display:flex;gap:22px}
 
+  /* coming soon tooltip for admin/placeholder links */
+  a.coming-soon{position:relative}
+  a.coming-soon::after{
+    content:attr(data-tooltip);
+    position:absolute;left:50%;transform:translateX(-50%) translateY(6px);
+    bottom:calc(100% + 8px);
+    background:var(--brass);color:var(--ebony);padding:6px 8px;border-radius:6px;
+    font-family:var(--mono);font-size:12px;white-space:nowrap;opacity:0;pointer-events:none;
+    transition:opacity .15s ease, transform .15s ease;box-shadow:0 6px 18px rgba(23,20,16,.12);z-index:90
+  }
+  a.coming-soon:hover::after,a.coming-soon:focus::after{opacity:1;transform:translateX(-50%) translateY(0)}
+
   /* ————— masthead ————— */
   .mast{background:var(--ebony);color:var(--ivory);position:sticky;top:0;z-index:60;border-bottom:1px solid rgba(200,154,74,.22)}
   .mast .wrap{display:flex;align-items:center;gap:28px;height:76px}
@@ -203,6 +215,7 @@
   .pl p{font-size:15.5px;color:#4A4238;margin:0 0 18px}
   .pl a{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
     border-bottom:1px solid var(--brass);padding-bottom:3px}
+  .pl .sub-link{display:inline-block;margin-top:12px}
 
   /* ————— news ————— */
   .news{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(24px,3vw,44px)}
@@ -271,7 +284,7 @@
       <a href="#" class="lang-link" data-lang="en">English</a><a href="#" class="lang-link" data-lang="hi">हिन्दी</a><a href="#" class="lang-link" data-lang="fr">Français</a><a href="#" class="lang-link" data-lang="de">Deutsch</a>
     </div>
     <div class="util-links">
-      <a href="#">Member federation login</a><a href="#">Media centre</a><a href="#">Contact</a>
+      <a href="#" class="coming-soon" data-tooltip="Coming soon">Member federation login</a><a href="#" class="coming-soon" data-tooltip="Coming soon">Media centre</a><a href="#" class="coming-soon" data-tooltip="Coming soon">Contact</a>
     </div>
   </div>
 </div>
@@ -412,8 +425,8 @@
 <!-- stat rail -->
 <div class="rail">
   <div class="wrap">
-    <div class="stat"><b>68</b><span>Member federations</span></div>
-    <div class="stat"><b>5</b><span>Continental confederations</span></div>
+    <div class="stat"><b id="member-count">68</b><span>Member federations</span></div>
+    <div class="stat"><b id="confed-count">5</b><span>Continental confederations</span></div>
     <div class="stat"><b>1,240</b><span>Ranked players</span></div>
     <div class="stat"><b>1935</b><span>Laws first codified</span></div>
   </div>
@@ -521,6 +534,7 @@
         <h3 data-i18n="governance.laws.title">Laws of the Game</h3>
         <p data-i18n="governance.laws.copy">One published rulebook, one board specification, one striker standard — binding at every sanctioned event from a club night to the World Championship.</p>
         <a href="#" id="read-laws-link" data-i18n="governance.laws.link">Read the Laws (2004 edition)</a>
+        <a href="#" id="read-modern-laws-link" class="sub-link" data-i18n="governance.laws.modern">Modern view, same laws - 2026</a>
       </div>
       <div class="pl">
         <h3>Integrity</h3>
@@ -795,6 +809,12 @@ function finalizeMembers(){
   populateMembersMenu();
   populateMembersRoll();
   updateConfedCounts();
+  // update top-level stat from members.json (fallback to MEMBERS length)
+  try{
+    const total = (MEMBER_LINKS && Object.keys(MEMBER_LINKS).length) || MEMBERS.length || 0;
+    const el = document.getElementById('member-count');
+    if(el) el.textContent = String(total);
+  }catch(err){/* ignore */}
 }
 
 // override loadMemberLinks to call finalizeMembers instead of just populateMembersMenu
@@ -902,6 +922,19 @@ document.addEventListener('click', e=>{
   </div>
 </div>
 
+<div id="modern-laws-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:121;align-items:center;justify-content:center;padding:24px">
+  <div id="modern-laws-dialog" style="width:min(1100px,98%);height:80vh;background:#fff;border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #eee;background:#f7f7f7">
+      <strong style="font-family:var(--mono)">Modern view, same laws - 2026</strong>
+      <a href="WCF-laws-of-carrom-2026-modern.html" target="_blank" rel="noopener" style="padding:8px 12px;border-radius:4px;background:var(--brass);color:#14110E;text-decoration:none;font-weight:600">Open in new tab</a>
+      <button id="modern-laws-close" aria-label="Close" style="margin-left:auto;background:none;border:0;font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div style="flex:1;overflow:auto;background:#fff">
+      <iframe id="modern-laws-iframe" src="WCF-laws-of-carrom-2026-modern.html" style="width:100%;height:100%;border:0;background:#fff" title="Modern Laws 2026 viewer"></iframe>
+    </div>
+  </div>
+</div>
+
 <script>
 // Open modal when Read the Laws is clicked
 document.getElementById('read-laws-link').addEventListener('click', function(e){
@@ -916,8 +949,25 @@ document.getElementById('laws-close').addEventListener('click', function(){
 document.getElementById('laws-open-new').addEventListener('click', function(){
   window.open('laws-of-carrom-2004-edition.pdf','_blank');
 });
+document.getElementById('read-modern-laws-link').addEventListener('click', function(e){
+  e.preventDefault();
+  document.getElementById('modern-laws-modal').style.display = 'flex';
+});
+document.getElementById('modern-laws-close').addEventListener('click', function(){
+  document.getElementById('modern-laws-modal').style.display = 'none';
+});
+document.getElementById('modern-laws-modal').addEventListener('click', function(e){
+  if(e.target === this){
+    this.style.display = 'none';
+  }
+});
 // close on Escape
-document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ document.getElementById('laws-modal').style.display = 'none'; } });
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    document.getElementById('laws-modal').style.display = 'none';
+    document.getElementById('modern-laws-modal').style.display = 'none';
+  }
+});
 </script>
 
 <script>
@@ -932,7 +982,7 @@ const TRANSLATIONS = {
     'competitions.eyebrow':'Competitions','competitions.h2':'On the board now','competitions.calendar':'Full calendar',
     'rankings.eyebrow':'World rankings','rankings.h2':'The order of play','rankings.info':'How points are earned',
     'members.eyebrow':'Member federations','members.h2':'Five confederations','members.affiliation':'Affiliation process',
-    'governance.laws.title':'Laws of the Game','governance.laws.copy':'One published rulebook, one board specification, one striker standard — binding at every sanctioned event from a club night to the World Championship.','governance.laws.link':'Read the Laws (2004 edition)',
+    'governance.laws.title':'Laws of the Game','governance.laws.copy':'One published rulebook, one board specification, one striker standard — binding at every sanctioned event from a club night to the World Championship.','governance.laws.link':'Read the Laws (2004 edition)','governance.laws.modern':'Modern view, same laws - 2026',
     'nav.competitions':'Competitions','nav.rankings':'Rankings','nav.governance':'Governance','nav.news':'News'
   },
   hi: {
@@ -943,7 +993,7 @@ const TRANSLATIONS = {
     'competitions.eyebrow':'प्रतियोगिताएँ','competitions.h2':'अब बोर्ड पर','competitions.calendar':'पूरा कैलेंडर',
     'rankings.eyebrow':'विश्व रैंकिंग','rankings.h2':'खेल का क्रम','rankings.info':'अंक कैसे मिलते हैं',
     'members.eyebrow':'सदस्य महासंघ','members.h2':'पाँच संवित्रण','members.affiliation':'अधिभोग प्रक्रिया',
-    'governance.laws.title':'खेल के नियम','governance.laws.copy':'एक प्रकाशित नियमावली, एक बोर्ड विनिर्देश, एक स्ट्राइकर मानक — हर अधिकृत आयोजन पर बाध्यकारी।','governance.laws.link':'नियम पढ़ें (2004 संस्करण)',
+    'governance.laws.title':'खेल के नियम','governance.laws.copy':'एक प्रकाशित नियमावली, एक बोर्ड विनिर्देश, एक स्ट्राइकर मानक — हर अधिकृत आयोजन पर बाध्यकारी।','governance.laws.link':'नियम पढ़ें (2004 संस्करण)','governance.laws.modern':'आधुनिक दृश्य, वही नियम - 2026',
     'nav.competitions':'प्रतियोगिताएँ','nav.rankings':'रैंकिंग','nav.governance':'शासन','nav.news':'समाचार'
   },
   fr: {
@@ -955,7 +1005,7 @@ const TRANSLATIONS = {
     'rankings.eyebrow':'Classements mondiaux','rankings.h2':'L\'ordre de jeu','rankings.info':'Comment les points sont gagnés',
     'members.eyebrow':'Fédérations membres','members.h2':'Cinq confédérations','members.affiliation':'Processus d\'affiliation',
     'governance.laws.title':'Règles du Jeu','governance.laws.copy':'Un livre de règles publié, une spécification de plateau, une norme de striker — contraignants lors de tout événement agréé.',
-    'governance.laws.link':'Lire les Règles (édition 2004)',
+    'governance.laws.link':'Lire les Règles (édition 2004)','governance.laws.modern':'Vue moderne, mêmes règles - 2026',
     'nav.competitions':'Compétitions','nav.rankings':'Classements','nav.governance':'Gouvernance','nav.news':'Actualités'
   },
   de: {
@@ -967,7 +1017,7 @@ const TRANSLATIONS = {
     'rankings.eyebrow':'Welt-Ranglisten','rankings.h2':'Die Spielreihenfolge','rankings.info':'Wie Punkte vergeben werden',
     'members.eyebrow':'Mitgliedsverbände','members.h2':'Fünf Konföderationen','members.affiliation':'Zulassungsverfahren',
     'governance.laws.title':'Spielregeln','governance.laws.copy':'Ein veröffentlichtes Regelwerk, eine Brettspezifikation, ein Striker-Standard — verbindlich bei jedem sanktionierten Ereignis.',
-    'governance.laws.link':'Regeln lesen (2004 Ausgabe)',
+    'governance.laws.link':'Regeln lesen (2004 Ausgabe)','governance.laws.modern':'Moderne Ansicht, gleiche Regeln - 2026',
     'nav.competitions':'Wettbewerbe','nav.rankings':'Ranglisten','nav.governance':'Verwaltung','nav.news':'Nachrichten'
   }
 };
